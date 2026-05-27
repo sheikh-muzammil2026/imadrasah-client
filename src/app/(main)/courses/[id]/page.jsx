@@ -1,9 +1,11 @@
 "use client";
 
-import { getCourseDetailsPromise } from "@/lib/data";
+import { authClient } from "@/lib/auth-client";
+import { getCourseDetailsPromise, submitEnrolledCourse } from "@/lib/data";
 import { Button, Chip } from "@heroui/react"; 
 import Image from "next/image";
 import React, { useEffect, useState, use } from "react";
+import { toast } from "react-toastify";
 
 const extraCourseFeatures = {
   classType: "Live on Zoom",
@@ -25,6 +27,10 @@ const extraCourseFeatures = {
 const CourseDetailsPage = ({ params }) => {
   const { id } = use(params);
 
+  const { data: session} = authClient.useSession();
+  const user= session?.user;
+  // console.log(userId, "user ID")
+
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -44,6 +50,28 @@ const CourseDetailsPage = ({ params }) => {
   }, [id]);
 
   // console.log(course)
+
+  const enrolledData = {
+        courseName: course?.title,
+        userEmail: user?.email,
+        userId: user?.id,
+        courseId: course?.id,
+        teacherName: course?.teacher,
+        subject: course?.subject,
+        classTime: course?.schedule,
+        bookedAt: new Date()
+  }
+
+  const handleenrolledNowButton = ()=>{
+    
+    try {
+      submitEnrolledCourse(enrolledData);
+      toast.success("Enrolled successfully")
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
 
   if (loading || !course) {
     return (
@@ -203,6 +231,7 @@ const CourseDetailsPage = ({ params }) => {
               {/* BUTTONS WITH MATCHING ADMISSION THEME */}
               <div className="space-y-3 pt-2 relative z-10">
                 <Button 
+                onClick={handleenrolledNowButton}
                   className="w-full h-12 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 font-bold text-white shadow-lg text-base transition duration-300 hover:opacity-95 active:scale-[0.98]"
                 >
                   Enroll Now

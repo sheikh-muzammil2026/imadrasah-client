@@ -10,3 +10,20 @@ export const getCourseDetailsPromise = async(id)=>{
     const data = await res.json()
     return data;
 }
+
+export const submitEnrolledCourse = async(enrolledData) =>{
+    const res = await fetch("http://localhost:5000/enrolled-courses", {
+        method: "POST",
+        headers: {
+            'content-type' : 'application/json'
+        },
+        body: JSON.stringify(enrolledData)
+    })
+
+}
+
+export const getMyEnrolledCoursesPromise = async() =>{
+    const res = await fetch("http://localhost:5000/enrolled-courses");
+    const data = await res.json()
+    return data;
+}
