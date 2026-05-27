@@ -24,8 +24,8 @@ export const submitEnrolledCourse = async(enrolledData) =>{
 
 }
 
-export const getMyEnrolledCoursesPromise = async() =>{
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/enrolled-courses`);
+export const getMyEnrolledCoursesPromise = async(userId) =>{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/enrolled-courses/${userId}`);
     const data = await res.json()
     return data;
 }

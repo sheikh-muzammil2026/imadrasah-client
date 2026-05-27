@@ -1,7 +1,7 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { getMyEnrolledCoursesPromise } from "@/lib/data";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const MyEnrolledClassesContent = () => {
@@ -9,9 +9,14 @@ const MyEnrolledClassesContent = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [isCancelOpen, setIsCancelOpen] = useState(false)
 
+  const {data:session} = authClient.useSession();
+  const userId = session?.user.id;
+
+  // console.log(userId, "from enrolled courses page")
+
   useEffect( ()=>{
     const getCoursesDataFromPromise = async()=>{
-       const courses = await getMyEnrolledCoursesPromise();
+       const courses = await getMyEnrolledCoursesPromise(userId);
         setEnrolledCourses(courses)
     }
     getCoursesDataFromPromise()
