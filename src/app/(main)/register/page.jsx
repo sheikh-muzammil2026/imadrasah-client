@@ -67,7 +67,7 @@ export default function RegisterPage() {
       <Card className="flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl md:flex-row">
         
         {/* Left Side */}
-        <div className="relative hidden flex-col justify-between bg-gradient-to-tr from-blue-600 to-indigo-700 p-8 text-white md:flex md:w-1/2">
+        <div className="relative hidden flex-col justify-between bg-gradient-to-tr from-blue-600 to-indigo-700 p-2 text-white md:flex md:w-1/2">
           
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">
@@ -87,9 +87,9 @@ export default function RegisterPage() {
         </div>
 
         {/* Right Side */}
-        <div className="flex w-full flex-col justify-center bg-slate-950/40 p-8 text-white md:w-1/2">
+        <div className="flex w-full flex-col justify-center bg-slate-950/40 p-4 text-white md:w-1/2">
           
-          <div className="mb-6">
+          <div className="mb-4">
             <h2 className="text-2xl font-bold">
               রেজিস্টার করুন
             </h2>
@@ -101,7 +101,7 @@ export default function RegisterPage() {
 
           <form
             onSubmit={handleRegister}
-            className="space-y-4"
+            className="space-y-2 w-full"
           >
             
              {/* Name */}
@@ -114,7 +114,7 @@ export default function RegisterPage() {
                 type="text"
                 required
                 name="name"
-                
+                className='w-full'
               />
             </div>
 
@@ -128,7 +128,7 @@ export default function RegisterPage() {
                 type="email"
                 required
                 name="email"
-               
+               className='w-full'
               />
             </div>
 
@@ -146,25 +146,25 @@ export default function RegisterPage() {
                   }
                   required
                   name="password"
-                  className="pr-12"
+                  className="pr-12 w-full"
                 />
 
-                <button
-                  type="button"
-                  onClick={toggleVisibility}
-                  className="absolute right-15 top-1 z-10 -translate-y-1/2 text-slate-400"
-                >
-                  {isVisible ? (
-                    <EyeClosed
-                      width={18}
-                      height={18}
-                    />
-                  ) : (
-                    <Eye
-                      width={18}
-                      height={18}
-                    />
-                  )}
+               <button
+                      type="button"
+                      onClick={toggleVisibility}
+                      className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
+                    >
+                      {isVisible ? (
+                        <EyeClosed
+                          width={18}
+                          height={18}
+                        />
+                      ) : (
+                        <Eye
+                          width={18}
+                          height={18}
+                        />
+                      )}
                 </button>
               </div>
             </div>
@@ -182,11 +182,29 @@ export default function RegisterPage() {
                   name="image"
                   required
                    placeholder="https://example.com/photo.jpg"
+                   className='w-full'
                 />
 
               </div>
             </div>
+            
+            {/* role */}
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                রোল
+              </label>
 
+              <div>
+                
+                <Input
+                  type="text"
+                  required
+                   placeholder="এডমিন / স্টুডেন্ট / টিচার "
+                   className='w-full'
+                />
+
+              </div>
+            </div>
             {/* Remember + Forgot */}
             <div className="flex items-center justify-between text-xs">
               
@@ -228,7 +246,7 @@ export default function RegisterPage() {
             
             <div className="absolute w-full border-t border-slate-800"></div>
 
-            <span className="relative bg-slate-900 px-3 text-xs uppercase text-slate-500">
+            <span className="relative px-2 text-xs uppercase text-slate-500">
               অথবা
             </span>
           </div>
@@ -247,7 +265,7 @@ export default function RegisterPage() {
           </Button>
 
           {/* Register */}
-          <p className="mt-6 text-center text-sm text-slate-400">
+          <p className="mt-2 text-center text-sm text-slate-400">
             অ্যাকাউন্ট নেই?{" "}
             
             <Link

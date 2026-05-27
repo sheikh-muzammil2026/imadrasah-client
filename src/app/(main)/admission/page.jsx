@@ -1,8 +1,29 @@
-
+'use client';
+import { sumbitAdmitedDataPromise } from '@/lib/data';
 import { Button, Card, Input, Label, TextArea } from '@heroui/react';
 import React from 'react';
+import { toast } from 'react-toastify';
 
 const AdmissionPage = () => {
+
+  const handleAdmissionForm = async(e)=>{
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const admitedData = Object.fromEntries(formData.entries());
+    console.log(admitedData);
+
+    try {
+      
+      sumbitAdmitedDataPromise(admitedData)
+      toast.success("Admission Submitted Successfully")
+        // form reset করতে চাইলে
+      e.target.reset();
+    } catch (error) {
+       console.log(error);
+      toast.error("Failed to submit admission");
+    }
+
+  }
     return (
        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 p-3 md:p-6">
   
@@ -73,7 +94,7 @@ const AdmissionPage = () => {
       </div>
 
       {/* FORM */}
-        <form className="space-y-4">
+        <form onSubmit={handleAdmissionForm} className="space-y-4">
 
         {/* ================= STUDENT INFORMATION ================= */}
 
