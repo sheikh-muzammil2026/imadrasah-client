@@ -46,6 +46,7 @@ const daynamicLabel = ()=>{
   if(user?.role === "teacher") return "Teacher";
   return "Student Feedback"
 }
+// console.log(user?.role, "from dynamic dashboard")
   // ডাইনামিক  path নির্ধারণ
   const menuItems = [
     { label: "Home", path: "/" },

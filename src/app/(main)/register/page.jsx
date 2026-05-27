@@ -24,7 +24,7 @@ export default function RegisterPage() {
     setIsLoading(true);
     const formData = new FormData(e.target);
     const user = Object.fromEntries(formData.entries());
-    console.log(user)
+    console.log(user, "from register form")
 
    try {
      
@@ -32,7 +32,8 @@ export default function RegisterPage() {
         email: user.email,
         password: user.password,
         name: user.name,
-        image: user.image
+        image: user.image,
+        role: user?.role
         
     })
      console.log(data)
@@ -199,6 +200,7 @@ export default function RegisterPage() {
                 <Input
                   type="text"
                   required
+                  name="role"
                    placeholder="এডমিন / স্টুডেন্ট / টিচার "
                    className='w-full'
                 />

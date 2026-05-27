@@ -22,18 +22,16 @@ export default function Navbar() {
   // log out button handleing
     const handleLogout = async() =>{
      try {
-       await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/login"); 
-        },
-      },
-      });
+       await authClient.signOut()
+        router.push("/login"); 
+        router.refresh(); // সার্ভার কম্পোনেন্ট এবং কুকি স্টেট রিফ্রেশ করার জন্য
      } catch (error) {
-      console.log(error)
+      console.log(error, "from logout button handling")
      }
     }
 
+         
+     
   // ডাইনামিক ড্যাশবোর্ড রুট নির্ধারণ
   const getDashboardPath = () => {
     if (user?.role === "admin") return "/admin-dashboard";
@@ -53,7 +51,7 @@ export default function Navbar() {
     { label: "Home", path: "/" },
     { label: "All Courses", path: "/courses" },
     { label: "Admission", path: "/admission" },
-    { label: "Course Details", path: `/courses/${user?.id}` },
+    { label: "All Students", path: `/all-students`},
     { label: "Dashboard", path: "/dashboard" },
     { label: getPortalTitle(user?.role), path: getDashboardPath() },
     
