@@ -1,13 +1,16 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { getMyEnrolledCoursesPromise } from "@/lib/data";
+import { cancelEnrolledCourses, getMyEnrolledCoursesPromise } from "@/lib/data";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const MyEnrolledClassesContent = () => {
 
+
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [isCancelOpen, setIsCancelOpen] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState()
 
   const {data:session} = authClient.useSession();
   const userId = session?.user.id;
@@ -21,11 +24,22 @@ const MyEnrolledClassesContent = () => {
     }
     getCoursesDataFromPromise()
 
-  },[])
+  },[userId])
 
   /**
    * 
    * */ 
+
+  const handleConfirmCancel = async(id) =>{
+     try {
+          await cancelEnrolledCourses(id)
+          toast.success("cancel button clicked")
+          
+      
+     } catch (error) {
+      console.log(error);
+     }
+  }
 
   return (
    <div className="min-h-screen bg-slate-50/70 py-10 px-4 sm:px-6 lg:px-8">
@@ -108,7 +122,9 @@ const MyEnrolledClassesContent = () => {
                   {/* Cancel Button */}
                   <td className="py-4.5 px-6 text-right whitespace-nowrap">
                     <button 
-                      onClick={() => setIsCancelOpen(true)}
+                      onClick={() => {
+                        setSelectedCourse(singleCourse._id)
+                        setIsCancelOpen(true)}}
                       className="text-xs font-bold bg-white text-red-600 border border-red-200 px-3.5 py-2 rounded-lg shadow-sm hover:bg-red-50 hover:border-red-300 active:scale-95 transition-all cursor-pointer"
                     >
                       Cancel
@@ -143,7 +159,10 @@ const MyEnrolledClassesContent = () => {
               No, Keep It
             </button>
             <button 
-              // onClick={handleConfirmCancel}
+              onClick={()=> {
+                handleConfirmCancel(selectedCourse)
+                setIsCancelOpen(false)
+              }}
               className="w-full py-2.5 text-sm font-semibold bg-red-600 text-white rounded-xl shadow-sm hover:bg-red-700 active:scale-98 transition-all cursor-pointer"
             >
               Yes, Cancel

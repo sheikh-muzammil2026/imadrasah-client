@@ -87,3 +87,24 @@ export const getMyAddedCoursesPromise = async(userId) =>{
         
     }
 }
+
+export const cancelEnrolledCourses = async(id)=>{
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/enrolled-courses/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+
+         if (!res.ok) {
+            throw new Error('Failed to delete course');
+        }
+
+        const data = await res.json();
+        return data;
+        
+    } catch (error) {
+        console.log(error);
+    }
+}

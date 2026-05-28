@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Button, Dropdown, Avatar, Label } from "@heroui/react";
 import { ArrowRightFromSquare } from "@gravity-ui/icons";
 import { authClient } from "@/lib/auth-client";
+import { MdMenu } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
 
 
 
@@ -150,7 +152,7 @@ export default function Navbar() {
               className="inline-flex items-center justify-center rounded-md p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
               aria-label="Toggle Menu"
             >
-              <i className={`text-xl ${isMenuOpen ? "gvt-x" : "gvt-menu"}`}></i>
+             {isMenuOpen ? <RxCross2 /> : <MdMenu />}
             </button>
           </div>
 

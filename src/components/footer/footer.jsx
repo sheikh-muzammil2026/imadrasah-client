@@ -36,8 +36,8 @@ export default function Footer() {
                 { name: "Home Page", href: "/" },
                 { name: "All Courses", href: "/courses" },
                 { name: "Online Admission", href: "/admission" },
-                { name: "Privacy Policy", href: "/privacy-policy" },
-                { name: "Terms & Conditions", href: "/terms" },
+                { name: "Privacy Policy", href: "#" },
+                { name: "Terms & Conditions", href: "#" },
               ].map((item, index) => (
                 <li key={index}>
                   <Link 
