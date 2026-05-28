@@ -30,6 +30,26 @@ export const getMyEnrolledCoursesPromise = async(userId) =>{
     return data;
 }
 
+export const cancelEnrolledCourses = async(id)=>{
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/enrolled-courses/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+
+         if (!res.ok) {
+            throw new Error('Failed to delete course');
+        }
+
+        const data = await res.json();
+        return data;
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export const submitAdmittedDataPromise = async(admittedData) =>{
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/admissions`, {
@@ -88,23 +108,22 @@ export const getMyAddedCoursesPromise = async(userId) =>{
     }
 }
 
-export const cancelEnrolledCourses = async(id)=>{
+export const cancelMyAddedCourse = async(courseId) =>{
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/enrolled-courses/${id}`, {
-            method: 'DELETE',
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/my-added-courses/${courseId}`, {
+            method: "DELETE",
             headers: {
                 'content-type': 'application/json'
             }
         })
-
-         if (!res.ok) {
-            throw new Error('Failed to delete course');
+        if(!res.ok){
+            console.log("my added course deleting failed")
         }
-
-        const data = await res.json();
+        const data = res.json();
         return data;
         
     } catch (error) {
-        console.log(error);
+        console.log(error, "From cancelMyAddedCourse fetching");
     }
+
 }

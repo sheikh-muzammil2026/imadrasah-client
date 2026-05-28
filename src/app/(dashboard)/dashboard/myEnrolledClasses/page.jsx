@@ -30,11 +30,14 @@ const MyEnrolledClassesContent = () => {
    * 
    * */ 
 
-  const handleConfirmCancel = async(id) =>{
+  const handleConfirmCancel = async() =>{
      try {
+          const id = selectedCourse?._id;
           await cancelEnrolledCourses(id)
-          toast.success("cancel button clicked")
-          
+          toast.success("The course has been deleted successfully. ✅");
+
+          const filteredCourses = enrolledCourses.filter((course)=> course._id != selectedCourse?._id)
+          setEnrolledCourses(filteredCourses)
       
      } catch (error) {
       console.log(error);
@@ -123,7 +126,7 @@ const MyEnrolledClassesContent = () => {
                   <td className="py-4.5 px-6 text-right whitespace-nowrap">
                     <button 
                       onClick={() => {
-                        setSelectedCourse(singleCourse._id)
+                        setSelectedCourse(singleCourse)
                         setIsCancelOpen(true)}}
                       className="text-xs font-bold bg-white text-red-600 border border-red-200 px-3.5 py-2 rounded-lg shadow-sm hover:bg-red-50 hover:border-red-300 active:scale-95 transition-all cursor-pointer"
                     >

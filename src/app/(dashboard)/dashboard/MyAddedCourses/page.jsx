@@ -1,14 +1,16 @@
 'use client'
 import { authClient } from '@/lib/auth-client';
-import { getMyAddedCoursesPromise } from '@/lib/data';
+import { cancelMyAddedCourse, getMyAddedCoursesPromise } from '@/lib/data';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const MyAddedCourses = () => {
 
     const [myCourses, setMyCourses] = useState([]);
     const [isUpdateOpen, setIsUpdateOpen] = useState(false)
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+    const [selectedCourse, setSelectedCourse] = useState()
 
 
     const {data:session} = authClient.useSession()
@@ -25,7 +27,21 @@ const MyAddedCourses = () => {
         } catch (error) {
             console.log(error);
         }
-    } , [])
+    } , [userId])
+
+    const handleConfirmDelete = async()=>{
+      try {
+        const selectedCourseId = selectedCourse?._id;
+        await cancelMyAddedCourse(selectedCourseId)
+        
+        const filteredCourses = myCourses.filter((course)=> course?._id !=selectedCourseId )
+        setMyCourses(filteredCourses);
+        toast.success("The course has been deleted successfully. ✅");
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     return (
      
@@ -120,13 +136,13 @@ const MyAddedCourses = () => {
                   <td className="py-5 px-6">
                     <div className="flex items-center gap-3">
 
-                      <Image
+                      {/* <Image
                         width={36}
                         height={36}
                         src={course?.image}
                         alt={course?.title}
                         className="w-12 h-12 rounded-xl object-cover border border-slate-200"
-                      />
+                      /> */}
 
                       <div>
                         <h3 className="font-semibold text-slate-900 line-clamp-1">
@@ -185,8 +201,11 @@ const MyAddedCourses = () => {
 
                       {/* Update */}
                       <button
-                      onClick={()=> setIsUpdateOpen(true)}
-                        // onClick={() => handleUpdateModal(course)}
+                      onClick={()=> {
+                        setIsUpdateOpen(true)
+                        // handleUpdateModal(course)
+                      }}
+                        
                         className="text-xs font-bold bg-white text-slate-700 border border-slate-200 px-4 py-2 rounded-lg shadow-sm hover:bg-slate-100 hover:border-slate-300 active:scale-95 transition-all cursor-pointer"
                       >
                         Update
@@ -194,8 +213,11 @@ const MyAddedCourses = () => {
 
                       {/* Delete */}
                       <button
-                        onClick={()=>setIsDeleteOpen(true)}
-                        // onClick={() => handleDeleteModal(course)}
+                        onClick={()=>{
+                          setIsDeleteOpen(true)
+                          setSelectedCourse(course)
+                        }}
+                       
                         className="text-xs font-bold bg-white text-red-600 border border-red-200 px-4 py-2 rounded-lg shadow-sm hover:bg-red-50 hover:border-red-300 active:scale-95 transition-all cursor-pointer"
                       >
                         Delete
@@ -383,7 +405,7 @@ const MyAddedCourses = () => {
             </button>
 
             <button
-              // onClick={handleConfirmDelete}
+              onClick={handleConfirmDelete}
               className="w-full py-2.5 text-sm font-semibold bg-red-600 text-white rounded-xl shadow-sm hover:bg-red-700 active:scale-98 transition-all cursor-pointer"
             >
               Yes, Delete
