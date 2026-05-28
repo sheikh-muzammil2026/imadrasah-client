@@ -44,7 +44,7 @@ export default function DashboardNavbar() {
 const daynamicLabel = ()=>{
   if(user?.role === "admin") return "Admin";
   if(user?.role === "teacher") return "Teacher";
-  return "Student Feedback"
+  return "Feedback"
 }
 // console.log(user?.role, "from dynamic dashboard")
   // ডাইনামিক  path নির্ধারণ

@@ -9,389 +9,49 @@ import {
   Button,
   Label
 } from "@heroui/react";
+import { submitMyaddedCourse } from "@/lib/data";
+import { toast } from "react-toastify";
+import { authClient } from "@/lib/auth-client";
 
-const categories = [
-  "হিফজ",
-  "নাজেরা",
-  "তাজবীদ",
-  "আরবি ভাষা",
-  "ইসলামিক স্টাডিজ",
-];
-
-const levels = [
-  "Beginner",
-  "Intermediate",
-  "Advanced",
-];
-
-const classTypes = [
-  "Live Class",
-  "Recorded",
-  "Hybrid",
-];
 
 export default function AddCoursePage() {
+
+  const {data:session} = authClient.useSession()
+  const userId = session?.user.id;
+  // console.log(userId)
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
 
-    const data = Object.fromEntries(formData.entries());
+    const myAddedCourse = Object.fromEntries(formData.entries());
+    
 
-    console.log(data);
+    const myAddedCourseWithId = {
+      ...myAddedCourse,
+      userId
+    }
+    console.log(myAddedCourseWithId);
+
+    try {
+      submitMyaddedCourse(myAddedCourseWithId);
+      toast.success("Added your course Successfully")
+      e.target.reset(); 
+
+    } catch (error) {
+
+      toast.error("Failed to submit admission");
+      console.log(error);
+      
+    }
+
+
+
   };
 
   return (
-//     <div className="max-w-6xl mx-auto p-4 md:p-8">
-//       <Card className="border shadow-xl p-6 md:p-10">
-//         {/* Header */}
-//         <div className="mb-8">
-//           <h1 className="text-3xl font-bold">
-//             নতুন কোর্স অ্যাড করুন
-//           </h1>
-
-//           <p className="text-default-500 mt-2">
-//             অনলাইন মাদ্রাসার জন্য নতুন
-//             কোর্স তৈরি করুন।
-//           </p>
-//         </div>
-
-//         {/* Form */}
-//         <form
-//           onSubmit={handleSubmit}
-//           className="space-y-10"
-//         >
-//           {/* ================= BASIC INFO ================= */}
-
-//           <div>
-//             <h2 className="text-xl font-semibold mb-5">
-//               Basic Information
-//             </h2>
-
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-//               <Input
-//                 name="title"
-//                 label="Course Title"
-//                 placeholder="হিফজুল কুরআন প্রোগ্রাম"
-//                 required
-//               />
-
-//               <Input
-//                 name="slug"
-//                 label="Course Slug"
-//                 placeholder="hifzul-quran-program"
-//                 required
-//               />
-
-//               <Input
-//                 name="instructor"
-//                 label="Instructor Name"
-//                 placeholder="মাওলানা আব্দুল্লাহ"
-//                 required
-//               />
-
-//               <Input
-//                 type="url"
-//                 name="thumbnail"
-//                 label="Thumbnail URL"
-//                 placeholder="https://example.com/image.jpg"
-//                 required
-//               />
-
-//               {/* Category Select */}
-
-//               <Select name="category">
-//                 <Label>
-//                   Course Category
-//                 </Label>
-
-//                 <Select.Trigger>
-//                   <Select.Value placeholder="Select Category" />
-
-//                   <Select.Indicator />
-//                 </Select.Trigger>
-
-//                 <Select.Popover>
-//                   <ListBox>
-//                     {categories.map((category) => (
-//                       <ListBox.Item
-//                         key={category}
-//                         id={category}
-//                         textValue={category}
-//                       >
-//                         {category}
-
-//                         <ListBox.ItemIndicator />
-//                       </ListBox.Item>
-//                     ))}
-//                   </ListBox>
-//                 </Select.Popover>
-//               </Select>
-
-//               {/* Level Select */}
-
-//               <Select name="level">
-//                 <Label>
-//                   Course Level
-//                 </Label>
-
-//                 <Select.Trigger>
-//                   <Select.Value placeholder="Select Level" />
-
-//                   <Select.Indicator />
-//                 </Select.Trigger>
-
-//                 <Select.Popover>
-//                   <ListBox>
-//                     {levels.map((level) => (
-//                       <ListBox.Item
-//                         key={level}
-//                         id={level}
-//                         textValue={level}
-//                       >
-//                         {level}
-
-//                         <ListBox.ItemIndicator />
-//                       </ListBox.Item>
-//                     ))}
-//                   </ListBox>
-//                 </Select.Popover>
-//               </Select>
-//             </div>
-
-//             {/* Description */}
-
-//             <div className="mt-5">
-//               <TextArea
-//                 name="shortDescription"
-//                 label="Short Description"
-//                 rows={3}
-//                 placeholder="কোর্স সম্পর্কে সংক্ষিপ্ত বিবরণ লিখুন"
-//                 required
-//               />
-//             </div>
-
-//             <div className="mt-5">
-//               <TextArea
-//                 name="fullDescription"
-//                 label="Full Description"
-//                 rows={6}
-//                 placeholder="কোর্স সম্পর্কে বিস্তারিত লিখুন"
-//                 required
-//               />
-//             </div>
-//           </div>
-
-//           {/* ================= COURSE DETAILS ================= */}
-
-//           <div>
-//             <h2 className="text-xl font-semibold mb-5">
-//               Course Details
-//             </h2>
-
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-//               <Input
-//                 name="duration"
-//                 label="Course Duration"
-//                 placeholder="৬ মাস"
-//                 required
-//               />
-
-//               <Input
-//                 type="number"
-//                 name="weeklyClasses"
-//                 label="Weekly Classes"
-//                 placeholder="3"
-//                 required
-//               />
-
-//               <Input
-//                 name="schedule"
-//                 label="Class Schedule"
-//                 placeholder="শনি - সোম | রাত ৮টা"
-//                 required
-//               />
-
-//               {/* Class Type Select */}
-
-//               <Select name="classType">
-//                 <Label>
-//                   Class Type
-//                 </Label>
-
-//                 <Select.Trigger>
-//                   <Select.Value placeholder="Select Class Type" />
-
-//                   <Select.Indicator />
-//                 </Select.Trigger>
-
-//                 <Select.Popover>
-//                   <ListBox>
-//                     {classTypes.map((type) => (
-//                       <ListBox.Item
-//                         key={type}
-//                         id={type}
-//                         textValue={type}
-//                       >
-//                         {type}
-
-//                         <ListBox.ItemIndicator />
-//                       </ListBox.Item>
-//                     ))}
-//                   </ListBox>
-//                 </Select.Popover>
-//               </Select>
-
-//               <Input
-//                 name="language"
-//                 label="Language"
-//                 placeholder="বাংলা"
-//                 required
-//               />
-
-//               <Input
-//                 type="url"
-//                 name="classLink"
-//                 label="Live Class Link"
-//                 placeholder="https://zoom.us/"
-//               />
-//             </div>
-//           </div>
-
-//           {/* ================= PRICING ================= */}
-
-//           <div>
-//             <h2 className="text-xl font-semibold mb-5">
-//               Pricing & Seats
-//             </h2>
-
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-//               <Input
-//                 type="number"
-//                 name="fee"
-//                 label="Course Fee"
-//                 placeholder="2000"
-//                 required
-//               />
-
-//               <Input
-//                 type="number"
-//                 name="discountPrice"
-//                 label="Discount Price"
-//                 placeholder="1500"
-//               />
-
-//               <Input
-//                 type="number"
-//                 name="totalSeats"
-//                 label="Total Seats"
-//                 placeholder="50"
-//                 required
-//               />
-
-//               <Input
-//                 type="date"
-//                 name="deadline"
-//                 label="Enrollment Deadline"
-//               />
-//             </div>
-
-//             <div className="mt-5">
-//               <Checkbox name="isFree">
-//                 এটি একটি ফ্রি কোর্স
-//               </Checkbox>
-//             </div>
-//           </div>
-
-//           {/* ================= CURRICULUM ================= */}
-
-//           <div>
-//             <h2 className="text-xl font-semibold mb-5">
-//               Curriculum
-//             </h2>
-
-//             <TextArea
-//               name="curriculum"
-//               rows={6}
-//               label="Course Curriculum"
-//               placeholder={`Module 1 - কুরআন পরিচিতি
-// Module 2 - মাখরাজ
-// Module 3 - তাজবীদ`}
-//             />
-//           </div>
-
-//           {/* ================= PUBLISH ================= */}
-
-//           <div>
-//             <h2 className="text-xl font-semibold mb-5">
-//               Publish Settings
-//             </h2>
-
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-//               {/* Status Select */}
-
-//               <Select name="status">
-//                 <Label>
-//                   Publish Status
-//                 </Label>
-
-//                 <Select.Trigger>
-//                   <Select.Value placeholder="Select Status" />
-
-//                   <Select.Indicator />
-//                 </Select.Trigger>
-
-//                 <Select.Popover>
-//                   <ListBox>
-//                     <ListBox.Item
-//                       id="draft"
-//                       textValue="Draft"
-//                     >
-//                       Draft
-
-//                       <ListBox.ItemIndicator />
-//                     </ListBox.Item>
-
-//                     <ListBox.Item
-//                       id="published"
-//                       textValue="Published"
-//                     >
-//                       Published
-
-//                       <ListBox.ItemIndicator />
-//                     </ListBox.Item>
-//                   </ListBox>
-//                 </Select.Popover>
-//               </Select>
-
-//               <Input
-//                 name="tags"
-//                 label="Course Tags"
-//                 placeholder="কুরআন, ইসলামিক, হিফজ"
-//               />
-//             </div>
-
-//             <div className="mt-5">
-//               <Checkbox name="featured">
-//                 Featured Course হিসেবে দেখান
-//               </Checkbox>
-//             </div>
-//           </div>
-
-//           {/* ================= BUTTON ================= */}
-
-//           <div className="pt-5">
-//             <Button
-//               type="submit"
-//               className="w-full md:w-fit"
-//             >
-//               Add Course
-//             </Button>
-//           </div>
-//         </form>
-//       </Card>
-//     </div>
-  <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 p-3 md:p-6">
+<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 p-3 md:p-6">
   
   <Card className="flex w-full max-w-7xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl md:flex-row">
 
@@ -399,38 +59,38 @@ export default function AddCoursePage() {
 
     <div className="relative hidden md:flex md:w-[35%] flex-col justify-between overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 p-10 text-white">
       
-      <div className="space-y-4 relative z-10">
+      <div className="relative z-10 space-y-4">
         <div className="inline-flex w-fit rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs backdrop-blur">
-          Online Madrasa Admission
+          Online Madrasa Course Management
         </div>
 
         <h1 className="text-4xl font-black leading-tight">
-          অনলাইন মাদ্রাসায় ভর্তি শুরু হয়েছে
+          নতুন কোর্স যুক্ত করুন সহজেই
         </h1>
 
         <p className="max-w-sm text-sm leading-7 text-blue-100/80">
-          ঘরে বসেই কুরআন, তাজবীদ, হিফজ ও ইসলামিক শিক্ষা গ্রহণ করুন অভিজ্ঞ উস্তাযদের মাধ্যমে।
+          নতুন ইসলামিক কোর্স, লাইভ ক্লাস, হিফজ, নাযেরা ও তাজবীদ প্রোগ্রাম সহজেই যুক্ত করুন এবং শিক্ষার্থীদের জন্য আধুনিক লার্নিং অভিজ্ঞতা তৈরি করুন।
         </p>
       </div>
 
       <div className="relative z-10 space-y-3">
         <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
           <h3 className="font-semibold">
-            ✔ লাইভ ক্লাস সিস্টেম
+            ✔ স্মার্ট কোর্স ম্যানেজমেন্ট
           </h3>
 
           <p className="mt-1 text-sm text-blue-100/70">
-            Zoom & Google Meet ভিত্তিক ক্লাস
+            কোর্স তথ্য, ব্যাচ ও সিট সহজেই নিয়ন্ত্রণ করুন
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
           <h3 className="font-semibold">
-            ✔ সার্টিফিকেট সুবিধা
+            ✔ লাইভ ক্লাস সাপোর্ট
           </h3>
 
           <p className="mt-1 text-sm text-blue-100/70">
-            কোর্স শেষে ডিজিটাল সার্টিফিকেট প্রদান
+            Zoom, Meet ও Recorded Class সুবিধা যুক্ত করুন
           </p>
         </div>
       </div>
@@ -445,294 +105,197 @@ export default function AddCoursePage() {
 
     {/* ================= RIGHT SIDE ================= */}
 
-    <div className="w-full md:w-[65%] bg-slate-950/50 p-5 md:p-8 text-white max-h-screen overflow-y-auto">
+    <div className="max-h-screen w-full overflow-y-auto bg-slate-950/50 p-5 text-white md:w-[65%] md:p-8">
 
       {/* Header */}
 
       <div className="mb-8">
         <h2 className="text-3xl font-bold">
-          Admission Form
+          Add New Course
         </h2>
 
         <p className="mt-2 text-sm text-slate-400">
-          আপনার সঠিক তথ্য দিয়ে ভর্তি ফর্ম পূরণ করুন
+          নতুন কোর্সের সঠিক তথ্য দিয়ে ফর্ম পূরণ করুন
         </p>
       </div>
 
       {/* FORM */}
-        <form onSubmit={handleSubmit } className="space-y-4">
 
-        {/* ================= STUDENT INFORMATION ================= */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+
+        {/* ================= COURSE INFORMATION ================= */}
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
 
-          <h2 className="mb-5 text-lg font-bold text-green-400 text-center">
-            Student Information
+          <h2 className="mb-5 text-center text-lg font-bold text-green-400">
+            Course Information
           </h2>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 
             <div className="flex flex-col gap-2">
-              <Label className="text-white">Student Name</Label>
-              <Input type="text" name="studentName" placeholder="Enter student name" required />
+              <Label className="text-white">Course Title</Label>
+              <Input
+                type="text"
+                name="title"
+                placeholder="Enter course title"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label className="text-white">Email Address</Label>
-              <Input type="email" name="email" placeholder="example@gmail.com" required />
+              <Label className="text-white">Instructor Name</Label>
+              <Input
+                type="text"
+                name="teacher"
+                placeholder="Enter instructor name"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label className="text-white">Phone Number</Label>
-              <Input type="tel" name="phone" placeholder="01XXXXXXXXX" required />
+              <Label className="text-white">Course Duration</Label>
+              <Input
+                type="text"
+                name="duration"
+                placeholder="3 Months"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label className="text-white">Date of Birth</Label>
-              <Input type="date" name="dob" />
+              <Label className="text-white">Course Fee</Label>
+              <Input
+                type="number"
+                name="fee"
+                placeholder="5000"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label className="text-white">Age</Label>
-              <Input type="number" name="age" placeholder="18" required />
+              <Label className="text-white">Total Seats</Label>
+              <Input
+                type="number"
+                name="seats"
+                placeholder="50"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label className="text-white">Gender</Label>
-              <Input type="text" name="gender" placeholder="Male / Female" />
+              <Label className="text-white">Class Schedule</Label>
+              <Input
+                type="text"
+                name="schedule"
+                placeholder="Sat - Mon | 8 PM"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label className="text-white">Level</Label>
+              <Input
+                type="text"
+                name="level"
+                placeholder="Beginner to Advanced"
+              />
+            </div>
+
+             <div className="flex flex-col gap-2">
+              <Label className="text-white">Subject</Label>
+              <Input
+                type="text"
+                name="subject"
+                placeholder="Hifzul Quran"
+              />
             </div>
 
           </div>
         </div>
 
-
-        {/* ================= GUARDIAN ================= */}
-
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-
-          <h2 className="mb-5 text-lg font-bold text-white text-center">
-            Guardian Information
-          </h2>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Father Name</Label>
-              <Input type="text" name="fatherName" required />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Mother Name</Label>
-              <Input type="text" name="motherName" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Guardian Name</Label>
-              <Input type="text" name="guardianName" required />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Guardian Phone</Label>
-              <Input type="tel" name="guardianPhone" placeholder="01XXXXXXXXX" required />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Relation with Student</Label>
-              <Input type="text" name="relation" placeholder="Father / Uncle" />
-            </div>
-
-          </div>
-        </div>
-
-
-        {/* ================= ACADEMIC ================= */}
+        {/* ================= COURSE DETAILS ================= */}
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
 
-          <h2 className="mb-5 text-lg font-bold text-white text-center">
-            Academic Information
-          </h2>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Previous Institution</Label>
-              <Input type="text" name="previousInstitution" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Previous Class / Level</Label>
-              <Input type="text" name="previousClass" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Desired Course</Label>
-              <Input type="text" name="desiredCourse" required />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Preferred Batch Time</Label>
-              <Input type="text" name="batchTime" placeholder="Morning / Evening" />
-            </div>
-
-          </div>
-        </div>
-
-
-        {/* ================= ADDRESS ================= */}
-
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-
-          <h2 className="mb-5 text-lg font-bold text-white text-center">
-            Address Information
-          </h2>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">District</Label>
-              <Input type="text" name="district" required />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Village / Area</Label>
-              <Input type="text" name="village" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Post Office</Label>
-              <Input type="text" name="postOffice" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Zip Code</Label>
-              <Input type="text" name="zipcode" />
-            </div>
-
-          </div>
-
-          <div className="mt-4 flex flex-col gap-2">
-            <Label className="text-white">Full Address</Label>
-            <TextArea name="fullAddress" rows={4} />
-          </div>
-        </div>
-
-
-        {/* ================= MADRASA ================= */}
-
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-
-          <h2 className="mb-5 text-lg font-bold text-white text-center">
-            Madrasa Related Information
-          </h2>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Can Read Quran?</Label>
-              <Input type="text" name="quranReading" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Nazera Completed?</Label>
-              <Input type="text" name="nazeraCompleted" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Hifz Completed?</Label>
-              <Input type="text" name="hifzCompleted" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Islamic Knowledge Level</Label>
-              <Input type="text" name="islamicKnowledge" />
-            </div>
-
-          </div>
-        </div>
-
-
-        {/* ================= ONLINE CLASS ================= */}
-
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-
-          <h2 className="mb-5 text-lg font-bold text-white text-center">
-            Online Class Related
-          </h2>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Device Available?</Label>
-              <Input type="text" name="deviceAvailable" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Internet Access?</Label>
-              <Input type="text" name="internetAccess" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Preferred Platform</Label>
-              <Input type="text" name="preferredPlatform" />
-            </div>
-
-          </div>
-        </div>
-
-
-        {/* ================= UPLOADS ================= */}
-
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-
-          <h2 className="mb-5 text-lg font-bold text-white text-center">
-            Important Uploads
-          </h2>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Student Photo URL</Label>
-              <Input type="url" name="studentPhoto" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Birth Certificate URL</Label>
-              <Input type="url" name="birthCertificate" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label className="text-white">Previous Result URL</Label>
-              <Input type="url" name="previousResult" />
-            </div>
-
-          </div>
-        </div>
-
-
-        {/* ================= EXTRA ================= */}
-
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-
-          <h2 className="mb-5 text-lg font-bold text-white text-center">
-            Extra Useful Information
+          <h2 className="mb-5 text-center text-lg font-bold text-white">
+            Course Details
           </h2>
 
           <div className="space-y-4">
 
             <div className="flex flex-col gap-2">
-              <Label className="text-white">Why do you want to join?</Label>
-              <TextArea name="joinReason" rows={4} />
+              <Label className="text-white">Short Description</Label>
+              <TextArea
+                name="shortDescription"
+                rows={3}
+                placeholder="Write short description"
+              />
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label className="text-white">Special Notes</Label>
-              <TextArea name="specialNotes" rows={4} />
+              <Label className="text-white">Full Description</Label>
+              <TextArea
+                name="fullDescription"
+                rows={5}
+                placeholder="Write detailed course description"
+              />
             </div>
 
           </div>
         </div>
 
+        {/* ================= COURSE MEDIA ================= */}
+
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
+
+          <h2 className="mb-5 text-center text-lg font-bold text-white">
+            Course Media & Resources
+          </h2>
+
+          <div className="grid grid-cols-1 gap-4">
+
+            <div className="flex flex-col gap-2">
+              <Label className="text-white">Course Thumbnail URL</Label>
+              <Input
+                type="url"
+                name="image"
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+
+          </div>
+        </div>
+
+        {/* ================= EXTRA INFO ================= */}
+
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
+
+          <h2 className="mb-5 text-center text-lg font-bold text-white">
+            Extra Information
+          </h2>
+
+          <div className="space-y-4">
+
+            <div className="flex flex-col gap-2">
+              <Label className="text-white">Course Requirements</Label>
+              <TextArea
+                name="requirements"
+                rows={4}
+                placeholder="Mention course requirements"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label className="text-white">Special Notes</Label>
+              <TextArea
+                name="specialNotes"
+                rows={4}
+                placeholder="Additional information"
+              />
+            </div>
+
+          </div>
+        </div>
 
         {/* ================= BUTTON ================= */}
 
@@ -740,10 +303,10 @@ export default function AddCoursePage() {
           type="submit"
           className="h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-base font-semibold text-white shadow-lg"
         >
-          Submit Admission Form
+          Add New Course
         </Button>
 
-        </form>
+      </form>
     </div>
   </Card>
 </div>

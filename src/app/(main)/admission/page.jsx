@@ -1,5 +1,5 @@
 'use client';
-import { sumbitAdmitedDataPromise } from '@/lib/data';
+import { submitAdmittedDataPromise } from '@/lib/data';
 import { Button, Card, Input, Label, TextArea } from '@heroui/react';
 import React from 'react';
 import { toast } from 'react-toastify';
@@ -9,12 +9,12 @@ const AdmissionPage = () => {
   const handleAdmissionForm = async(e)=>{
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const admitedData = Object.fromEntries(formData.entries());
-    console.log(admitedData);
+    const admittedData = Object.fromEntries(formData.entries());
+    // console.log(admittedData);
 
     try {
       
-      sumbitAdmitedDataPromise(admitedData)
+     submitAdmittedDataPromise(admittedData)
       toast.success("Admission Submitted Successfully")
         // form reset করতে চাইলে
       e.target.reset();

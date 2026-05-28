@@ -31,14 +31,59 @@ export const getMyEnrolledCoursesPromise = async(userId) =>{
 }
 
 
-export const sumbitAdmitedDataPromise = async(admitedData) =>{
+export const submitAdmittedDataPromise = async(admittedData) =>{
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/admissions`, {
         method: "POST",
         headers: {
             'content-type' : 'application/json'
         },
-        body: JSON.stringify(admitedData)
+        body: JSON.stringify(admittedData)
     })
     const data = await res.json();
     return data;
+}
+
+export const getAdmittedStudentListPromise = async()=>{
+    try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/admissions`);
+            const studentsList = res.json()
+            return studentsList;
+        
+    } catch (error) {
+        console.log(error, "from admitted students data fetchin");
+    }
+}
+
+
+export const submitMyaddedCourse = async(myAddedCourseWithId)=>{
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/my-added-courses`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(myAddedCourseWithId)
+
+        })
+        const data = await res.json();
+        return data;
+
+    } catch (error) {
+        console.log(error, "during post my added course data to server")
+        
+    }
+}
+
+
+export const getMyAddedCoursesPromise = async(userId) =>{
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/my-added-courses/${userId}`);
+        const data = await res.json()
+        return data;
+        
+    } catch (error) {
+
+        console.log(error);
+        
+    }
 }
