@@ -1,7 +1,8 @@
 'use client'
 import { authClient } from '@/lib/auth-client';
-import { cancelMyAddedCourse, getMyAddedCoursesPromise } from '@/lib/data';
+import { cancelMyAddedCourse, getMyAddedCoursesPromise, updateMyAddedCourse } from '@/lib/data';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -42,6 +43,39 @@ const MyAddedCourses = () => {
         console.log(error);
       }
     }
+    const handleUpdateCourse = async(e) =>{
+      try {
+        e.preventDefault()
+        const formData = new FormData(e.target);
+        const updatedValues = Object.fromEntries(formData.entries())
+
+        const courseId = selectedCourse._id;
+        
+       const result = await updateMyAddedCourse(updatedValues,courseId);
+       if(result.modifiedCount > 0){
+        toast.success(
+        "Course Updated Successfully"
+      );
+       }
+
+      //  UI update after save change
+       const updatedCourses = myCourses.map((course)=> {
+        if(course._id === courseId) {
+          return {
+            ...myCourses,
+            ...updatedValues
+          }
+        }
+        return myCourses;
+       })
+       setMyCourses(updatedCourses)
+
+       setIsUpdateOpen(false)
+        
+      } catch (error) {
+        console.log(error, "from update course error handling");
+      }
+    }
 
     return (
      
@@ -61,9 +95,9 @@ const MyAddedCourses = () => {
       </div>
 
       {/* Optional Add Course Button */}
-      <button className="bg-slate-900 text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-md hover:bg-slate-800 active:scale-95 transition-all cursor-pointer">
+      <Link href={'/dashboard/add-course'}><button className="bg-slate-900 text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-md hover:bg-slate-800 active:scale-95 transition-all cursor-pointer">
         + Add New Course
-      </button>
+      </button></Link>
     </div>
 
     {/* Empty State */}
@@ -136,13 +170,13 @@ const MyAddedCourses = () => {
                   <td className="py-5 px-6">
                     <div className="flex items-center gap-3">
 
-                      {/* <Image
+                      <Image
                         width={36}
                         height={36}
                         src={course?.image}
                         alt={course?.title}
                         className="w-12 h-12 rounded-xl object-cover border border-slate-200"
-                      /> */}
+                      />
 
                       <div>
                         <h3 className="font-semibold text-slate-900 line-clamp-1">
@@ -159,7 +193,7 @@ const MyAddedCourses = () => {
 
                   {/* Category */}
                   <td className="py-5 px-6 text-slate-600 font-medium whitespace-nowrap">
-                    {course?.category || "N/A"}
+                    {course?.subject || "N/A"}
                   </td>
 
                   {/* Level */}
@@ -203,7 +237,7 @@ const MyAddedCourses = () => {
                       <button
                       onClick={()=> {
                         setIsUpdateOpen(true)
-                        // handleUpdateModal(course)
+                        setSelectedCourse(course)
                       }}
                         
                         className="text-xs font-bold bg-white text-slate-700 border border-slate-200 px-4 py-2 rounded-lg shadow-sm hover:bg-slate-100 hover:border-slate-300 active:scale-95 transition-all cursor-pointer"
@@ -266,7 +300,7 @@ const MyAddedCourses = () => {
 
           {/* Form */}
           <form
-            // onSubmit={handleUpdateCourse}
+            onSubmit={handleUpdateCourse}
             className="p-7 grid grid-cols-1 sm:grid-cols-2 gap-5"
           >
 
@@ -278,7 +312,8 @@ const MyAddedCourses = () => {
 
               <input
                 type="text"
-                // defaultValue={selectedCourse?.title}
+                name='title'
+                defaultValue={selectedCourse?.title}
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
               />
             </div>
@@ -291,7 +326,8 @@ const MyAddedCourses = () => {
 
               <input
                 type="text"
-                // defaultValue={selectedCourse?.category}
+                 name='subject'
+                defaultValue={selectedCourse?.subject}
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
               />
             </div>
@@ -304,7 +340,8 @@ const MyAddedCourses = () => {
 
               <input
                 type="text"
-                // defaultValue={selectedCourse?.level}
+                 name='level'
+                defaultValue={selectedCourse?.level}
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
               />
             </div>
@@ -317,7 +354,8 @@ const MyAddedCourses = () => {
 
               <input
                 type="number"
-                // defaultValue={selectedCourse?.price}
+                 name='fee'
+                defaultValue={selectedCourse?.fee}
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
               />
             </div>
@@ -330,7 +368,8 @@ const MyAddedCourses = () => {
 
               <input
                 type="url"
-                // defaultValue={selectedCourse?.thumbnail}
+                 name='image'
+                defaultValue={selectedCourse?.image}
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
               />
             </div>
@@ -343,7 +382,8 @@ const MyAddedCourses = () => {
 
               <textarea
                 rows={4}
-                // defaultValue={selectedCourse?.description}
+                 name='shortDescription'
+                defaultValue={selectedCourse?.shortDescription}
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300 resize-none"
               />
             </div>

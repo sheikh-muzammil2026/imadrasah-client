@@ -25,8 +25,9 @@ export default function Navbar() {
     const handleLogout = async() =>{
      try {
        await authClient.signOut()
-        router.push("/login"); 
-        router.refresh(); // সার্ভার কম্পোনেন্ট এবং কুকি স্টেট রিফ্রেশ করার জন্য
+        
+       router.refresh();
+       router.replace("/login");
      } catch (error) {
       console.log(error, "from logout button handling")
      }

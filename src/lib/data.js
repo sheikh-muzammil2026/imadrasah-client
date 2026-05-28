@@ -127,3 +127,23 @@ export const cancelMyAddedCourse = async(courseId) =>{
     }
 
 }
+
+export const updateMyAddedCourse = async(updatedValues,courseId) =>{
+    try {
+        
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/my-added-courses/${courseId}`,{
+            method: "PATCH",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(updatedValues)
+        })
+        if(!res.ok){
+             throw new Error("Failed to update course");
+        }
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error, "Updated velue patching time error");
+    }
+}

@@ -58,8 +58,18 @@ export default function RegisterPage() {
      
   };
 
-  const handleGoogleLogin = () => {
-    toast.success("Google এর মাধ্যমে লগইন করা হচ্ছে...");
+  const handleGoogleLogin = async() => {
+    try {
+       await authClient.signIn.social({
+       provider: "google",
+        callbackURL: "/", 
+  });
+
+  toast.success("logged with google successfully");
+    } catch (error) {
+      
+    }
+    
   };
 
   return (

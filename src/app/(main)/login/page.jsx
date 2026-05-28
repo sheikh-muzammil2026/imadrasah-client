@@ -49,8 +49,18 @@ export default function LoginPage() {
    
   };
 
-  const handleGoogleLogin = () => {
-    toast.success("Google এর মাধ্যমে লগইন করা হচ্ছে...");
+  const handleGoogleLogin = async() => {
+     try {
+      await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/", 
+                });
+      toast.success("logged in successfully");
+     
+     } catch (error) {
+      console.log(error, "from google login in login page")
+      
+     }
   };
 
   return (
