@@ -38,14 +38,10 @@ export default function DashboardNavbar() {
 
   const role = user?.role;
   const menuItems = [
-    { label: "Home", path: "/" },
-    { label: 
-      role === "admin" ? "Admin"
-      : role === "teacher" ? "Teacher"
-      : "Feedback",
-
-      path: "/dashboard" },
    
+    {label: "Home", path: "/"},
+    {label: "Admin Panel", path: "/dashboard/admin-dashboard"},
+    {label: "Teacher Panel", path: "/dashboard/teacher-dashboard"},
     { label: "Add Course", path: "/dashboard/add-course" },
     { label: "My Courses", path: "/dashboard/MyAddedCourses" },
     { label: "My Classes", path: "/dashboard/myEnrolledClasses" }
