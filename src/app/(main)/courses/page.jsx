@@ -104,7 +104,7 @@ export default function CoursesPage() {
               </div>
             </div>
 
-            {/* Action Button */}
+            {/* Action Button-1 */}
             <div className="mt-6">
              <Link href={`/courses/${course?._id}`}> 
              <Button
@@ -113,7 +113,7 @@ export default function CoursesPage() {
                 size="md"
                 className="bg-green-700 font-semibold text-white transition duration-300 hover:bg-green-800 shadow-sm"
               >
-                View Course Details
+                Course Details
               </Button>
              </Link>
             </div>

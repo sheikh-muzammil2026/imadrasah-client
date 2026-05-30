@@ -5,6 +5,18 @@ export const getAllCoursesPromise = async()=>{
     return data;
 }
 
+export const deleteFromAllCourses = async (courseId)=>{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/courses/${courseId}`, {
+    method: "DELETE",
+    headers: {
+      'content-type': 'application/json'
+    }
+   
+  });
+  const data = await res.json();
+  return data;
+}
+
 export const getAvalilableCourses = async()=>{
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/available-courses`);
     const data = await res.json()

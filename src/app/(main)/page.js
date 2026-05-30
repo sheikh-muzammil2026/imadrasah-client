@@ -247,7 +247,7 @@ export default function HomePage() {
                   <div className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                     <p className="flex items-center gap-2">
                       <i className="gvt-user text-emerald-600"></i>
-                      <span>হুজুর: <strong>{course.teacher}</strong></span>
+                      <span>শিক্ষক: <strong>{course.teacher}</strong></span>
                     </p>
                     <p className="flex items-center gap-2">
                       <i className="gvt-clock text-emerald-600"></i>
@@ -272,9 +272,9 @@ export default function HomePage() {
                   <p className="font-extrabold text-xl text-emerald-600 dark:text-emerald-400">৳{course.fee}</p>
                 </div>
                 
+               <Link href={`/courses/${course?._id}`}>
                 <Button
-                  as={Link}
-                  href={`/course/${course.id}`}
+                  // as={Link}
                   color={course.seats > 0 ? "emerald" : "default"}
                   disabled={course.seats === 0}
                   className={`${course.seats > 0 ? "bg-emerald-600 text-white" : "bg-slate-300 dark:bg-slate-800 text-slate-500"} font-semibold`}
@@ -282,6 +282,7 @@ export default function HomePage() {
                 >
                   {course.seats > 0 ? "Course Details" : "House Full"}
                 </Button>
+               </Link>
               </div>
             </Card>
           ))}

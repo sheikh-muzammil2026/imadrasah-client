@@ -2,9 +2,10 @@
 
 import UpdateCourseInfo from "@/components/updateCouseInfoModal/UpdateCourseInfo";
 import { authClient } from "@/lib/auth-client";
-import { getCourseDetailsPromise, submitEnrolledCourse } from "@/lib/data";
+import { deleteFromAllCourses, getCourseDetailsPromise, submitEnrolledCourse } from "@/lib/data";
 import { Button, Chip } from "@heroui/react"; 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState, use } from "react";
 import { toast } from "react-toastify";
 
@@ -27,6 +28,7 @@ const extraCourseFeatures = {
 
 const CourseDetailsPage = ({ params }) => {
   const { id } = use(params);
+  const router = useRouter();
 
   const { data: session} = authClient.useSession();
   const user= session?.user;
@@ -75,6 +77,12 @@ const CourseDetailsPage = ({ params }) => {
     
   }
 
+ const  handleDeleteCourseButton = async(courseId)=>{
+        await deleteFromAllCourses(courseId)
+        toast.success('Course deleted successfully.Now you redirected to all Courses page')
+        router.push('/courses')
+ }
+
   if (loading || !course) {
     return (
       <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 gap-4">
@@ -97,7 +105,8 @@ const CourseDetailsPage = ({ params }) => {
             {/* TITLE & CHIPS CARD */}
             <div className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl shadow-2xl">
               <div className="flex flex-wrap gap-2">
-                <Chip variant="flat" size="sm" className="font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/20">
+              
+                 <Chip variant="flat" size="sm" className="font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/20">
                   {course.subject}
                 </Chip>
 
@@ -108,6 +117,8 @@ const CourseDetailsPage = ({ params }) => {
                 <Chip variant="flat" size="sm" className="font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
                   🎥 {extraCourseFeatures.classType}
                 </Chip>
+               
+                
               </div>
 
               <h1 className="text-2xl md:text-4xl font-black text-white leading-tight">
@@ -203,10 +214,18 @@ const CourseDetailsPage = ({ params }) => {
                   {course.fee}
                 </h2>
 
-                <div className="pt-1">
+                <div className="pt-1 flex justify-between">
                   <Chip size="sm" className="font-bold bg-red-500/20 text-red-300 border border-red-500/30 animate-pulse">
                     ⚠️ Only {course.seats} seats left
                   </Chip>
+
+                   {/* Action Button */}
+                  <Button 
+                  variant="danger-soft"
+                  onClick={()=> handleDeleteCourseButton(course?._id)}
+                >
+                  Delete Course
+                </Button>
                 </div>
               </div>
 
@@ -239,7 +258,8 @@ const CourseDetailsPage = ({ params }) => {
                   Enroll Now
                 </Button>
 
-                <Button
+               
+                  <Button
                   onClick={()=> {
                     setIsUpdateModalOpen(true)
                     
@@ -248,7 +268,9 @@ const CourseDetailsPage = ({ params }) => {
                   className="w-full h-11 border-white/20 bg-white/5 font-semibold text-blue-100 transition hover:bg-white/10"
                 >
                   Update Info
-                </Button>
+                </Button >
+               
+               
               </div>
 
               <p className="text-xs text-center font-medium text-blue-100/40 relative z-10">
