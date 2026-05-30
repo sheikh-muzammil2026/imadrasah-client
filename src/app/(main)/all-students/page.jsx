@@ -1,18 +1,19 @@
 'use client'
-import { getAdmittedStudentListPromise } from '@/lib/data';
+import { deleteAdmittedStudentData, getAdmittedStudentListPromise } from '@/lib/data';
+import { Button } from '@heroui/react';
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const StudentList = () => {
-  // স্টুডেন্ট ডাটা সেভ করার জন্য স্টেট
+ 
   const [students, setStudents] = useState([]);
-  // ডাটা লোড হচ্ছে কিনা তা ট্র্যাক করার জন্য লোডিং স্টেট
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // ব্যাকএন্ড API থেকে ডাটা নিয়ে আসার ফাংশন
+   
     const fetchStudents = async () => {
       try {
-        const response = await getAdmittedStudentListPromise() // আপনার ব্যাকএন্ড ইউআরএল দিন
+        const response = await getAdmittedStudentListPromise() 
         setStudents(response);
         setLoading(false);
       } catch (error) {
@@ -22,7 +23,21 @@ const StudentList = () => {
     };
 
     fetchStudents();
-  }, []); // খালি অ্যারে দেওয়ার কারণে এটি পেজ লোডের সময় মাত্র একবারই চলবে (কোনো রেন্ডার লুপ হবে না)
+  }, []); 
+
+  const handleDeleteAdmissionInfo = async(studentId) =>{
+   try {
+    await deleteAdmittedStudentData(studentId);
+    toast.success("Students data delete successfully.")
+
+    const filteredAllStudentsData = students.filter((student)=> student?._id !=studentId )
+    setStudents(filteredAllStudentsData);
+    
+   } catch (error) {
+    console.log(error, "from all students page. error on delete data fetching time")
+   }
+    
+  }
 
   if (loading) {
     return <div style={{ textAlign: 'center', marginTop: '50px' }}>লোডিং হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।</div>;
@@ -43,6 +58,7 @@ const StudentList = () => {
               <th style={tableHeaderStyle}>ইমেইল</th>
               <th style={tableHeaderStyle}>কোর্স</th>
               <th style={tableHeaderStyle}>ভর্তির তারিখ</th>
+              <th style={tableHeaderStyle}>ডিলিট</th>
             </tr>
           </thead>
           <tbody>
@@ -54,6 +70,13 @@ const StudentList = () => {
                 <td style={tableCellStyle}>{student?.desiredCourse || 'N/A'}</td>
                 <td style={tableCellStyle}>
                   {student?.date ? new Date(student.date).toLocaleDateString() : 'N/A'}
+                </td>
+                <td style={tableCellStyle}>
+                  <Button 
+                  variant='danger-soft'
+                  onClick={()=>handleDeleteAdmissionInfo(student?._id)}>
+                    Delete
+                  </Button>
                 </td>
               </tr>
             ))}

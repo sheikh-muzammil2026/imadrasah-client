@@ -128,6 +128,23 @@ export const getAdmittedStudentListPromise = async()=>{
     }
 }
 
+export const deleteAdmittedStudentData = async(studentId)=>{
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/admissions/${studentId}`,{
+        method: "DELETE",
+        headers: {
+            'content-type': 'application/json'
+        }
+
+    });
+    const data = await res.json();
+    return data;
+    } catch (error) {
+        console.log(error, "from fetching deleted data ")
+        
+    }
+    
+}
 
 export const submitMyaddedCourse = async(myAddedCourseWithId)=>{
     try {
