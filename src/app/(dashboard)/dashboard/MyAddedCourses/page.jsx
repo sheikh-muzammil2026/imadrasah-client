@@ -62,11 +62,11 @@ const MyAddedCourses = () => {
        const updatedCourses = myCourses.map((course)=> {
         if(course._id === courseId) {
           return {
-            ...myCourses,
+            ...course,
             ...updatedValues
           }
         }
-        return myCourses;
+        return course;
        })
        setMyCourses(updatedCourses)
 

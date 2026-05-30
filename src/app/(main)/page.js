@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button, Card,Chip } from "@heroui/react";
 import Image from "next/image";
+import { getAvalilableCourses } from "@/lib/data";
 
 export default function HomePage() {
   // ১. ব্যানার ক্যারোসেল স্টেট ও ডাটা
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [popularCourses, setPopularCourses] = useState([])
  const bannerSlides = [
     {
       title: "ঘরে বসেই হোক দ্বীনি শিক্ষার সূচনা",
@@ -33,6 +35,7 @@ export default function HomePage() {
  
   
   useEffect(() => {
+
     const slideInterval = setInterval(() => {
       setCurrentSlide((prevSlide) => 
         prevSlide === bannerSlides.length - 1 ? 0 : prevSlide + 1
@@ -43,69 +46,85 @@ export default function HomePage() {
     return () => clearInterval(slideInterval);
   }, [bannerSlides.length]);
 
-  // ২. পপুলার কোর্স ডাটা (৬টি কার্ড যা ব্যাকএন্ডে $limit: 6 নির্দেশ করে)
- const popularCourses = [
-    {
-      id: "c1",
-      title: "সহীহ কুরআন ও তাজবীদ শিক্ষা (ল্যাঙ্গুয়েজ ও গ্রামার)",
-      teacher: "মুফতি মুহাম্মাদ আব্দুল্লাহ",
-      subject: "Tajweed",
-      schedule: "সোম & বুধ | রাত ০৮:৩০ - ০৯:৩০",
-      fee: 1500,
-      seats: 5,
-      thumbnail: "https://images.unsplash.com/photo-1544502062-f82887f03d1c?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-      id: "c2",
-      title: "সহীহ বুখারী ও হাদিস শাস্ত্রের সহজ পাঠ",
-      teacher: "ড. মাওলানা উমর ফারুক",
-      subject: "Hadith",
-      schedule: "শনি & মঙ্গল | বিকাল ০৪:০০ - ০৫:০০",
-      fee: 2000,
-      seats: 12,
-      thumbnail: "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-      id: "c3",
-      title: "দৈনন্দিন জীবনের প্রয়োজনীয় ফিকহ ও মাসআলা",
-      teacher: "মুফতি সাঈদ আহমদ",
-      subject: "Fiqh",
-      schedule: "রবি & বৃহস্পতি | রাত ০৯:০০ - ১০:০০",
-      fee: 1200,
-      seats: 0,
-      thumbnail: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-      id: "c4",
-      title: "আরби ভাষা শিক্ষা ও ব্যাকরণ (লেভেল ১)",
-      teacher: "অধ্যাপক আল-আমীন হোসাইন",
-      subject: "Arabic",
-      schedule: "শুক্র & শনি | সকাল ১০:০০ - ১১:৩০",
-      fee: 1800,
-      seats: 8,
-      thumbnail: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-      id: "c5",
-      title: "ইসলামের ইতিহাস ও মুসলিম সভ্যতার উত্থান",
-      teacher: "মাওলানা জুবায়ের রহমান",
-      subject: "Islamic History",
-      schedule: "সোম & বুধ | রাত ০৭:০০ - ০৮:০০",
-      fee: 1000,
-      seats: 15,
-      thumbnail: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-      id: "c6",
-      title: "শিশুদের জন্য কায়দা ও আমপারা শিক্ষা",
-      teacher: "হাফেজা আয়েশা সিদ্দিকা",
-      subject: "Quran",
-      schedule: "শনি থেকে মঙ্গল | বিকাল ০৩:০০ - ০৪:০০",
-      fee: 1500,
-      seats: 3,
-      thumbnail: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=500&q=80"
+  useEffect(()=>{
+    const getAvailableSixData = async()=>{
+      try {
+
+      const availableData = await getAvalilableCourses();
+      setPopularCourses(availableData)
+        
+      } catch (error) {
+        console.log(error, "from home page, available data fatching time error")
+      }
     }
-  ];
+    getAvailableSixData()
+  } , [])
+
+  console.log(popularCourses)
+
+  // ২. পপুলার কোর্স ডাটা (৬টি কার্ড যা ব্যাকএন্ডে $limit: 6 নির্দেশ করে)
+//  const popularCourses = [
+//     {
+//       id: "c1",
+//       title: "সহীহ কুরআন ও তাজবীদ শিক্ষা (ল্যাঙ্গুয়েজ ও গ্রামার)",
+//       teacher: "মুফতি মুহাম্মাদ আব্দুল্লাহ",
+//       subject: "Tajweed",
+//       schedule: "সোম & বুধ | রাত ০৮:৩০ - ০৯:৩০",
+//       fee: 1500,
+//       seats: 5,
+//       thumbnail: "https://images.unsplash.com/photo-1544502062-f82887f03d1c?auto=format&fit=crop&w=500&q=80"
+//     },
+//     {
+//       id: "c2",
+//       title: "সহীহ বুখারী ও হাদিস শাস্ত্রের সহজ পাঠ",
+//       teacher: "ড. মাওলানা উমর ফারুক",
+//       subject: "Hadith",
+//       schedule: "শনি & মঙ্গল | বিকাল ০৪:০০ - ০৫:০০",
+//       fee: 2000,
+//       seats: 12,
+//       thumbnail: "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=500&q=80"
+//     },
+//     {
+//       id: "c3",
+//       title: "দৈনন্দিন জীবনের প্রয়োজনীয় ফিকহ ও মাসআলা",
+//       teacher: "মুফতি সাঈদ আহমদ",
+//       subject: "Fiqh",
+//       schedule: "রবি & বৃহস্পতি | রাত ০৯:০০ - ১০:০০",
+//       fee: 1200,
+//       seats: 0,
+//       thumbnail: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&q=80"
+//     },
+//     {
+//       id: "c4",
+//       title: "আরби ভাষা শিক্ষা ও ব্যাকরণ (লেভেল ১)",
+//       teacher: "অধ্যাপক আল-আমীন হোসাইন",
+//       subject: "Arabic",
+//       schedule: "শুক্র & শনি | সকাল ১০:০০ - ১১:৩০",
+//       fee: 1800,
+//       seats: 8,
+//       thumbnail: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=500&q=80"
+//     },
+//     {
+//       id: "c5",
+//       title: "ইসলামের ইতিহাস ও মুসলিম সভ্যতার উত্থান",
+//       teacher: "মাওলানা জুবায়ের রহমান",
+//       subject: "Islamic History",
+//       schedule: "সোম & বুধ | রাত ০৭:০০ - ০৮:০০",
+//       fee: 1000,
+//       seats: 15,
+//       thumbnail: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=500&q=80"
+//     },
+//     {
+//       id: "c6",
+//       title: "শিশুদের জন্য কায়দা ও আমপারা শিক্ষা",
+//       teacher: "হাফেজা আয়েশা সিদ্দিকা",
+//       subject: "Quran",
+//       schedule: "শনি থেকে মঙ্গল | বিকাল ০৩:০০ - ০৪:০০",
+//       fee: 1500,
+//       seats: 3,
+//       thumbnail: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=500&q=80"
+//     }
+//   ];
 
   // ৩. টেস্টীমোনিয়াল মক ডাটা
   const testimonials = [
@@ -194,9 +213,9 @@ export default function HomePage() {
 
         {/* ৬টি কোর্সের রেসপনসিভ গ্রিড লেআউট */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {popularCourses.map((course) => (
+          {popularCourses?.map((course, index) => (
             <Card 
-              key={course.id} 
+              key={index} 
               className="shadow-md border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-2xl overflow-hidden flex flex-col justify-between h-full transition-transform hover:scale-[1.01]"
             >
               {/* ইমেজ ও সাবজেক্ট চিপ */}
@@ -204,9 +223,9 @@ export default function HomePage() {
                 <Image
                 width={500}
                 height={400}
-                  alt={course.title}
+                  alt={course?.title}
                   className="object-cover w-full h-full rounded-none"
-                  src={course.thumbnail}
+                  src={course?.image}
                 />
                 <Chip 
                   className="absolute top-3 right-3 z-20 font-semibold" 

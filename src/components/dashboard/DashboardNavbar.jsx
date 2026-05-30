@@ -36,24 +36,17 @@ export default function DashboardNavbar() {
      }
     }
 
-  // // ডাইনামিক ড্যাশবোর্ড রুট নির্ধারণ
-  const getDashboardPath = () => {
-    if (user?.role === "admin") return "/dashboard/admin-dashboard";
-    if (user?.role === "teacher") return "/dashboard/teacher-dashboard";
-    return "/dashboard";
-  };
-
-const daynamicLabel = ()=>{
-  if(user?.role === "admin") return "Admin";
-  if(user?.role === "teacher") return "Teacher";
-  return "Feedback"
-}
-// console.log(user?.role, "from dynamic dashboard")
-  // ডাইনামিক  path নির্ধারণ
+  const role = user?.role;
   const menuItems = [
     { label: "Home", path: "/" },
-    { label: daynamicLabel(), path: getDashboardPath() },
-     { label: "Add Course", path: "/dashboard/add-course" },
+    { label: 
+      role === "admin" ? "Admin"
+      : role === "teacher" ? "Teacher"
+      : "Feedback",
+
+      path: "/dashboard" },
+   
+    { label: "Add Course", path: "/dashboard/add-course" },
     { label: "My Courses", path: "/dashboard/MyAddedCourses" },
     { label: "My Classes", path: "/dashboard/myEnrolledClasses" }
     

@@ -36,7 +36,7 @@ export default function CoursesPage() {
     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {courses?.map((course) => (
         <Card
-          key={course?.id}
+          key={course?._id}
           className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
         >
           

@@ -1,5 +1,6 @@
 "use client";
 
+import UpdateCourseInfo from "@/components/updateCouseInfoModal/UpdateCourseInfo";
 import { authClient } from "@/lib/auth-client";
 import { getCourseDetailsPromise, submitEnrolledCourse } from "@/lib/data";
 import { Button, Chip } from "@heroui/react"; 
@@ -33,6 +34,7 @@ const CourseDetailsPage = ({ params }) => {
 
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
 
   useEffect(() => {
     const getCourseDetailsById = async () => {
@@ -237,11 +239,15 @@ const CourseDetailsPage = ({ params }) => {
                   Enroll Now
                 </Button>
 
-                <Button 
+                <Button
+                  onClick={()=> {
+                    setIsUpdateModalOpen(true)
+                    
+                  }}
                   variant="bordered"
                   className="w-full h-11 border-white/20 bg-white/5 font-semibold text-blue-100 transition hover:bg-white/10"
                 >
-                  Contact Info
+                  Update Info
                 </Button>
               </div>
 
@@ -255,6 +261,12 @@ const CourseDetailsPage = ({ params }) => {
         </div>
 
       </div>
+      {isUpdateModalOpen && (
+        <UpdateCourseInfo 
+        courseData={course}
+        setCourse={setCourse}
+        onClose={() => setIsUpdateModalOpen(false)} />
+      )}
     </section>
   );
 };

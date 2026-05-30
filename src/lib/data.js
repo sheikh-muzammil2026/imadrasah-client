@@ -5,12 +5,37 @@ export const getAllCoursesPromise = async()=>{
     return data;
 }
 
+export const getAvalilableCourses = async()=>{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/available-courses`);
+    const data = await res.json()
+    return data;
+}
+
 export const getCourseDetailsPromise = async(id)=>{
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/courses/${id}`);
     const data = await res.json()
     return data;
 }
 
+export const updateDetailsCourse = async(courseId, updateValues)=>{
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/courses/${courseId}`,{
+            method: "PATCH",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(updateValues)
+        });
+        if(!res.ok){
+            console.log("fatching time error in client side");
+        }
+        const data = await res.json();
+        return data;
+        
+    } catch (error) {
+        console.log(error, "from update data fatching time error");
+    }
+}
 export const submitEnrolledCourse = async(enrolledData) =>{
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/enrolled-courses`, {
         method: "POST",
@@ -28,6 +53,23 @@ export const getMyEnrolledCoursesPromise = async(userId) =>{
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/enrolled-courses/${userId}`);
     const data = await res.json()
     return data;
+}
+
+export const updateMyEnrolledClass = async (updateClass, classId)=>{
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/enrolled-courses/${classId}`, {
+            method: "PATCH",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(updateClass)
+        })
+        const data = await res.json()
+        return data;
+    } catch (error) {
+        console.log(error, "from update patching time");
+    }
+
 }
 
 export const cancelEnrolledCourses = async(id)=>{

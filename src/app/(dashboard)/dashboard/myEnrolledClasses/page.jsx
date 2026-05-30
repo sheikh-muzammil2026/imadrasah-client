@@ -1,7 +1,7 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { cancelEnrolledCourses, getMyEnrolledCoursesPromise } from "@/lib/data";
+import { cancelEnrolledCourses, getMyEnrolledCoursesPromise, updateMyEnrolledClass } from "@/lib/data";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -11,6 +11,7 @@ const MyEnrolledClassesContent = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [isCancelOpen, setIsCancelOpen] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState()
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false)
 
   const {data:session} = authClient.useSession();
   const userId = session?.user.id;
@@ -27,8 +28,44 @@ const MyEnrolledClassesContent = () => {
   },[userId])
 
   /**
-   * 
+   * form data nite hobe
+   * coursId dhore update korte hbe
+   * UI update korar jonno filter banate hobe.
    * */ 
+
+  const handleUpdateClass = async(e) =>{
+    try {
+       e.preventDefault()
+       const formData = new FormData(e.target);
+       const updatedValues = Object.fromEntries(formData.entries())
+
+       const classId = selectedCourse?._id;
+      const result = await updateMyEnrolledClass(updatedValues,classId)
+
+      if(result.modifiedCount > 0){
+          toast.success("Saved successfully")
+
+          const updateUiAfterMaping = enrolledCourses.map((course)=> {
+        if(course._id === classId){
+          return {
+            ...course,
+            ...updatedValues
+          }
+        }
+        return course;
+      });
+      console.log(updateUiAfterMaping, "after maping");
+      setEnrolledCourses(updateUiAfterMaping);
+      setIsUpdateOpen(false)
+      }
+
+
+    } catch (error) {
+      console.log(error, "from handle update class function");
+      toast.error("Update failed");
+    }
+    
+  }
 
   const handleConfirmCancel = async() =>{
      try {
@@ -122,6 +159,18 @@ const MyEnrolledClassesContent = () => {
                     {singleCourse?.classTime || "N/A"}
                   </td>
 
+                  {/* update button */}
+                  <td className="py-4.5 px-6 text-right whitespace-nowrap">
+                    <button 
+                      onClick={() => {
+                        setSelectedCourse(singleCourse)
+                        setIsUpdateOpen(true)}}
+                      className="text-xs font-bold bg-white text-red-600 border border-red-200 px-3.5 py-2 rounded-lg shadow-sm hover:bg-red-50 hover:border-red-300 active:scale-95 transition-all cursor-pointer"
+                    >
+                      update
+                    </button>
+                  </td>
+
                   {/* Cancel Button */}
                   <td className="py-4.5 px-6 text-right whitespace-nowrap">
                     <button 
@@ -138,6 +187,139 @@ const MyEnrolledClassesContent = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+    )}
+
+
+    {/* ===================== */}
+    {/* UPDATE Class MODAL */}
+    {/* ===================== */}
+
+    {isUpdateOpen && (
+      <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
+
+        <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+
+          {/* Header */}
+          <div className="px-7 py-5 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-slate-900">
+                Update Class
+              </h2>
+
+              <p className="text-sm text-slate-500 mt-1">
+                Edit your class information below.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setIsUpdateOpen(false)}
+              className="w-9 h-9 rounded-full hover:bg-slate-100 transition flex items-center justify-center text-slate-500 cursor-pointer"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Form */}
+          <form
+            onSubmit={handleUpdateClass}
+            className="p-7 grid grid-cols-1 sm:grid-cols-2 gap-5"
+          >
+
+            {/* Course Title */}
+            <div className="sm:col-span-2">
+              <label className="text-sm font-semibold text-slate-700 mb-2 block">
+                Class Title
+              </label>
+
+              <input
+                type="text"
+                name='courseName'
+                defaultValue={selectedCourse?.courseName}
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
+              />
+            </div>
+
+            {/* Category */}
+            <div>
+              <label className="text-sm font-semibold text-slate-700 mb-2 block">
+                Category
+              </label>
+
+              <input
+                type="text"
+                 name='subject'
+                defaultValue={selectedCourse?.subject}
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
+              />
+            </div>
+
+            {/* Level */}
+            <div>
+              <label className="text-sm font-semibold text-slate-700 mb-2 block">
+                Email
+              </label>
+
+              <input
+                type="email"
+                 name='userEmail'
+                defaultValue={selectedCourse?.userEmail}
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
+              />
+            </div>
+
+            {/* Price */}
+            <div>
+              <label className="text-sm font-semibold text-slate-700 mb-2 block">
+                Teacher
+              </label>
+
+              <input
+                type="text"
+                 name='teacherName'
+                defaultValue={selectedCourse?.teacherName}
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
+              />
+            </div>
+
+            {/* Thumbnail */}
+            <div>
+              <label className="text-sm font-semibold text-slate-700 mb-2 block">
+                Class Time
+              </label>
+
+              <input
+                type="text"
+                 name='classTime'
+                defaultValue={selectedCourse?.classTime}
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-slate-300"
+              />
+            </div>
+
+           
+
+            {/* Buttons */}
+            <div className="sm:col-span-2 flex items-center justify-end gap-3 pt-2">
+
+              <button
+                type="button"
+                onClick={() => setIsUpdateOpen(false)}
+                className="px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-100 transition cursor-pointer"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition-all shadow cursor-pointer"
+              >
+                Save Changes
+              </button>
+
+            </div>
+
+          </form>
         </div>
       </div>
     )}

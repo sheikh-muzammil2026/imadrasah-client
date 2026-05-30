@@ -24,7 +24,7 @@ export default function RegisterPage() {
     setIsLoading(true);
     const formData = new FormData(e.target);
     const user = Object.fromEntries(formData.entries());
-    console.log(user, "from register form")
+    console.log(user?.role, "from register form")
 
    try {
      
@@ -33,7 +33,7 @@ export default function RegisterPage() {
         password: user.password,
         name: user.name,
         image: user.image,
-        role: user?.role
+        role: user?.role?.toLowerCase()?.trim() || "student",
         
     })
      console.log(data)
@@ -201,22 +201,21 @@ export default function RegisterPage() {
             
             {/* role */}
             <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                রোল
-              </label>
+                <label className="mb-2 block text-sm text-slate-300">
+                  রোল
+                </label>
 
-              <div>
-                
-                <Input
-                  type="text"
-                  required
+                <select
                   name="role"
-                   placeholder="এডমিন / স্টুডেন্ট / টিচার "
-                   className='w-full'
-                />
-
+                  required
+                  className="w-full border rounded px-3 py-2"
+                >
+                  <option value="">Select Role</option>
+                  <option value="student">Student</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="admin">Admin</option>
+                </select>
               </div>
-            </div>
             {/* Remember + Forgot */}
             <div className="flex items-center justify-between text-xs">
               
