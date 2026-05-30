@@ -7,7 +7,7 @@ export async function proxy(request) {
     const session = await auth.api.getSession({
     headers: await headers() 
 })
-    if(!session){
+    if(!session && !session.user){
        
         return NextResponse.redirect(new URL('/login', request.url))
     }

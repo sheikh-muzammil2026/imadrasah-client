@@ -28,7 +28,7 @@ const StudentList = () => {
   const handleDeleteAdmissionInfo = async(studentId) =>{
    try {
     await deleteAdmittedStudentData(studentId);
-    toast.success("Students data delete successfully.")
+    toast.success("Students data deleted successfully.")
 
     const filteredAllStudentsData = students.filter((student)=> student?._id !=studentId )
     setStudents(filteredAllStudentsData);
