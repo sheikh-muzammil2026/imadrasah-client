@@ -9,20 +9,21 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState, use } from "react";
 import { toast } from "react-toastify";
 
+
+// আপনার কোড অনুযায়ী অনুমান করে তৈরি করা লোকাল অবজেক্ট
 const extraCourseFeatures = {
-  classType: "Live on Zoom",
-  targetAudience: "শুধুমাত্র ছোট ছেলেদের জন্য (বয়স: ৮-১৫ বছর)",
+  classType: "Live + Recorded Classes",
+  targetAudience: "Beginners to Intermediate students who want to master this skill with hands-on projects.",
   willLearn: [
-    "কুরআনের শেষ ১০টি সূরা সম্পূর্ণ সহীহ-শুদ্ধভাবে মুখস্থ করা",
-    "নূরানী নিয়মে আরবী হরফের সঠিক মাখরাজ ও উচ্চারণ শেখা",
-    "গুন্নাহ, ইদগাম এবং কলকলাহ-এর প্র্যাকটিক্যাল প্রয়োগ",
-    "প্রতিদিনের প্রয়োজনীয় দোয়া ও মাসনুন আমলসমূহ মুখস্থ করা",
-    "সালাত বা নামাযের ভেতরের সব তাসবীহ ও নিয়মকানুন সংশোধন"
+    "Comprehensive understanding from core concepts to advanced techniques.",
+    "Hands-on experience with real-world industry standard projects.",
+    "Best practices, optimization tips, and clean coding standards.",
+    "Access to exclusive community support and weekly live Q&A sessions."
   ],
   requirements: [
-    "নূরানী কায়দা সম্পূর্ণ বা আংশিক পড়া জানা থাকতে হবে",
-    "স্মার্টফোন বা ল্যাপটপ + internet",
-    "প্রতিদিন ৩০ মিনিট রিভিশনের অভ্যাস"
+    "Basic computer operating knowledge and a stable internet connection.",
+    "No prior advanced programming or domain experience required.",
+    "A dedication to learn and practice at least 5-6 hours per week."
   ]
 };
 

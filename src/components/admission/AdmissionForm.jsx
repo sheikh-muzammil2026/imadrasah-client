@@ -4,7 +4,7 @@ import { Button, Card, Input, Label, TextArea } from '@heroui/react';
 import React from 'react';
 import { toast } from 'react-toastify';
 
-const AdmissionPage = () => {
+const AdmissionForm = () => {
 
   const handleAdmissionForm = async(e)=>{
     e.preventDefault();
@@ -384,4 +384,4 @@ const AdmissionPage = () => {
     );
 };
 
-export default AdmissionPage;
+export default AdmissionForm;

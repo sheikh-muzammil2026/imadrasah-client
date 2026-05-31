@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@heroui/react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function HeroSection() {
   
@@ -70,6 +71,7 @@ export default function HeroSection() {
           variants={itemVariants}
           className="flex flex-wrap gap-4 justify-center pt-4"
         >
+          <Link href={'/admission'}>
           <Button
             size="lg"
             color="secondary"
@@ -78,7 +80,9 @@ export default function HeroSection() {
           >
             এখনই ভর্তি হোন
           </Button>
+          </Link>
           
+          <Link href={'/courses'}>
           <Button
             size="lg"
             variant="bordered"
@@ -86,6 +90,7 @@ export default function HeroSection() {
           >
             কোর্সসমূহ দেখুন
           </Button>
+          </Link>
         </motion.div>
 
       </motion.div>

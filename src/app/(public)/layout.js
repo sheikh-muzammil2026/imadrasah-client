@@ -1,7 +1,7 @@
 // app/(main)/layout.jsx
 
-import Footer from "@/components/footer/footer";
-import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/shared/Footer";
+import Navbar from "@/components/shared/Navbar";
 
 export default function MainLayout({
   children,

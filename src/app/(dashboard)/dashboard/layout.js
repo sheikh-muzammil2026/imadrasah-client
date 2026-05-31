@@ -2,6 +2,14 @@
 
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 
+export const metadata = {
+ title: {
+      default: "Dasboard",
+      template: "%s | DeenSphere",
+        },
+  description: "Online Madrasa Platform",
+};
+
 export default function DashboardLayout({
   children,
 }) {

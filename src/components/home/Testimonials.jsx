@@ -31,13 +31,13 @@ const reviews = [
   }
 ];
 
-export default function StudentsReviews() {
+export default function Testimonials() {
   // ২. ইনফিনিট লুপ ট্রিক: ডাটাবেজের কমেন্টগুলোকে ডাবল (Duplicate) করে নেওয়া, 
   // যাতে অ্যানিমেশন শেষ হওয়ার পর কোনো ফাঁকা জায়গা তৈরি না হয়।
   const duplicatedReviews = [...reviews, ...reviews];
 
   return (
-    <section className="max-w-7xl mx-auto mt-10 py-20 sm:px-6 lg:px-8 rounded-t-2xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 overflow-hidden w-full">
+    <section className="max-w-7xl mx-auto mt-10 py-20 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 overflow-hidden w-full rounded-2xl">
       <div className="max-w-5xl mx-auto px-4 text-center mb-12">
         <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
           আমাদের শিক্ষার্থীরা কী বলছেন

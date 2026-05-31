@@ -1,9 +1,26 @@
+'use client'
+import { getAvalilableCourses } from '@/lib/data';
 import { Button, Card, Chip } from '@heroui/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const PopularCardSection = ({popularCourses}) => {
+const PopularCardSection = () => {
+    const [popularCourses, setPopularCourses] = useState([])
+
+  useEffect(()=>{
+    const getAvailableSixData = async()=>{
+      try {
+
+      const availableData = await getAvalilableCourses();
+      setPopularCourses(availableData)
+        
+      } catch (error) {
+        console.log(error, "from home page, available data fatching time error")
+      }
+    }
+    getAvailableSixData()
+  } , [])
     console.log(popularCourses)
     return (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">

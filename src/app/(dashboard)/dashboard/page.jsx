@@ -1,7 +1,5 @@
 "use client";
 
-import HeroSection from "@/components/dashboard/dashboardHero/HeroSection";
-import StudentsReviews from "@/components/dashboard/Reviews/StudentsReviews";
 import { useState } from "react";
 
 export default function StudentFeedbackPage() {
@@ -28,29 +26,11 @@ export default function StudentFeedbackPage() {
     setIsSubmitting(true);
     setStatus({ type: null, message: "" });
 
-    // try {
-    //   const response = await fetch("/api/feedback", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(formData),
-    //   });
-
-    //   if (response.ok) {
-    //     setStatus({ type: "success", message: "ধন্যবাদ! আপনার ফিডব্যাক সফলভাবে জমা হয়েছে।" });
-    //     setFormData({ name: "", email: "", rating: "5", comment: "" }); // ফর্ম রিসেট
-    //   } else {
-    //     setStatus({ type: "error", message: "দুঃখিত, কোথাও ভুল হয়েছে। আবার চেষ্টা করুন।" });
-    //   }
-    // } catch (error) {
-    //   setStatus({ type: "error", message: "সার্ভারে সমস্যা হচ্ছে। দয়া করে পরে চেষ্টা করুন।" });
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
   };
 
   return (
     <>
-    <HeroSection/>
+    
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -167,7 +147,7 @@ export default function StudentFeedbackPage() {
         </div>
       </div>
     </div>
-    <StudentsReviews/>
+
     </>
   );
 }

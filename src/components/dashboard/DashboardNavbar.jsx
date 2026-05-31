@@ -36,15 +36,15 @@ export default function DashboardNavbar() {
      }
     }
 
-  const role = user?.role;
   const menuItems = [
    
     {label: "Home", path: "/"},
-    {label: "Admin Panel", path: "/dashboard/admin-dashboard"},
-    {label: "Teacher Panel", path: "/dashboard/teacher-dashboard"},
+    {label: "Admin", path: "/dashboard/admin"},
+    {label: "Teacher", path: "/dashboard/teacher"},
+    {label: "Admissions", path: "/dashboard/admissions"},
     { label: "Add Course", path: "/dashboard/add-course" },
-    { label: "My Courses", path: "/dashboard/MyAddedCourses" },
-    { label: "My Classes", path: "/dashboard/myEnrolledClasses" }
+    { label: "My Courses", path: "/dashboard/my-courses" },
+    { label: "My Classes", path: "/dashboard/my-enrollments" }
     
   ];
 

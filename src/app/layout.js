@@ -15,7 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "DeenSphere",
+ title: {
+      default: "DeenSphere",
+      template: "%s | DeenSphere",
+        },
   description: "Online Madrasa Platform",
 };
 

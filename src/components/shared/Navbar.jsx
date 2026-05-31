@@ -34,29 +34,11 @@ export default function Navbar() {
     }
 
          
-     
-  // ডাইনামিক ড্যাশবোর্ড রুট নির্ধারণ
-  const getDashboardPath = () => {
-    if (user?.role === "admin") return "/admin-dashboard";
-    if (user?.role === "teacher") return "/teacher-dashboard";
-    return "/dashboard";
-  };
-
-  const getPortalTitle = (role) => {
-  if (role === "admin") return "Admin Panel";
-  if (role === "teacher") return "Teacher Portal";
-  if (role === "student") return "Student Portal";
-
-};
-
-  // ডাইনামিক  path নির্ধারণ
   const menuItems = [
     { label: "Home", path: "/" },
     { label: "All Courses", path: "/courses" },
     { label: "Admission", path: "/admission" },
-    { label: "All Students", path: `/all-students`},
     { label: "Dashboard", path: "/dashboard" },
-    { label: getPortalTitle(user?.role), path: getDashboardPath() },
     
   ];
 
@@ -216,3 +198,5 @@ export default function Navbar() {
     </nav>
   );
 }
+
+

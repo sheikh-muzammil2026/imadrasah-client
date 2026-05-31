@@ -7,7 +7,8 @@ import { getAllCoursesPromise } from "@/lib/data";
 import Link from "next/link";
   
 
-export default function CoursesPage() {
+
+export default function AllCourses() {
   const [courses, setCourses] = useState([])
 
   useEffect(()=>{
