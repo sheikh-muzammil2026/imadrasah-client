@@ -1,4 +1,5 @@
 "use client"
+import { ThemeProvider } from 'next-themes';
 import React from 'react';
 import { ToastContainer } from 'react-toastify';
 
@@ -6,8 +7,11 @@ import { ToastContainer } from 'react-toastify';
 const Providers = ( {children}) => {
     return (
        <>
-        {children}
-         <ToastContainer/>
+           <ThemeProvider attribute="class" defaultTheme="light">
+            {children}
+         <ToastContainer theme="system" />
+           </ThemeProvider>
+        
        </>
     );
 };

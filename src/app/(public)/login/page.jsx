@@ -9,9 +9,24 @@ import { FcGoogle } from "react-icons/fc";
 import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
-  const [isVisible, setIsVisible] = useState(false);
 
+  const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [password, setPassword]   = useState("");
+  const [passError, setPassError] = useState("");
+
+  const validatePassword = (password) =>{
+    if(password.length < 8){
+      return "Password must be at least 8 characters";
+    }
+    if(!/[A-Z]/.test(password)){
+      return "Password must be contain at least one uppercase letter"
+    }
+    if(!/[0-9]/.test(password)){
+      return "Password must be contain at least one number"
+    }
+    return ""
+  }
 
   const toggleVisibility = () => {
     setIsVisible((prev) => !prev);
@@ -64,15 +79,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 px-4 py-6 sm:p-6">
       
       <Card className="flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl md:flex-row">
         
         {/* Left Side */}
-        <div className="relative hidden flex-col justify-between bg-gradient-to-tr from-blue-600 to-indigo-700 p-8 text-white md:flex md:w-1/2">
+        <div className="relative hidden flex-col justify-between bg-gradient-to-tr from-blue-600 to-indigo-700 p-6 lg:p-8 text-white md:flex md:w-1/2">
           
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">
+            <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">
               স্বাগতম আবার!
             </h1>
 
@@ -89,10 +104,10 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side */}
-        <div className="flex w-full flex-col justify-center bg-slate-950/40 p-8 text-white md:w-1/2">
+        <div className="flex w-full flex-col justify-center bg-slate-950/40 p-5 sm:p-6 md:p-8 text-white md:w-1/2">
           
           <div className="mb-6">
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-xl sm:text-2xl font-bold">
               লগইন করুন
             </h2>
 
@@ -116,49 +131,53 @@ export default function LoginPage() {
                 type="email"
                 required
                 name="email"
-                className="text-black"
+                className="w-full"
               />
             </div>
 
             {/* Password */}
-            <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                পাসওয়ার্ড
-              </label>
+           <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              পাসওয়ার্ড
+            </label>
 
-              <div className="relative">
-                
-                <Input
-                  type={
-                    isVisible ? "text" : "password"
-                  }
-                  required
-                  name="password"
-                  className="pr-12 text-black"
-                />
+            <div className="relative">
+              <Input
+                type={isVisible ? "text" : "password"}
+                required
+                name="password"
+                className="w-full pr-10"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPassError(validatePassword(e.target.value));
+                }}
+              />
 
-                <button
-                  type="button"
-                  onClick={toggleVisibility}
-                  className="absolute right-15 top-1/2 z-15 -translate-y-1/2 text-slate-400"
-                >
-                  {isVisible ? (
-                    <EyeClosed
-                      width={18}
-                      height={18}
-                    />
-                  ) : (
-                    <Eye
-                      width={18}
-                      height={18}
-                    />
-                  )}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={toggleVisibility}
+                className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-slate-400"
+              >
+                {isVisible ? (
+                  <EyeClosed width={18} height={18} />
+                ) : (
+                  <Eye width={18} height={18} />
+                )}
+              </button>
             </div>
 
+            <div className="min-h-[20px] mt-1">
+              {passError && (
+                <p className="text-sm text-red-500">
+                  {passError}
+                </p>
+              )}
+            </div>
+          </div>
+
             {/* Remember + Forgot */}
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:justify-between">
               
               <Checkbox size="sm">
                 <span className="text-slate-400">
@@ -178,7 +197,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               isLoading={isLoading}
-              className="w-full bg-indigo-600 font-semibold text-white hover:bg-indigo-700"
+              className="w-full min-h-11 bg-indigo-600 font-semibold text-white hover:bg-indigo-700"
             >
               <div className="flex items-center gap-2">
                 লগইন করুন
@@ -207,7 +226,7 @@ export default function LoginPage() {
           <Button
             variant="bordered"
             onClick={handleGoogleLogin}
-            className="w-full border-slate-700 text-slate-200 hover:bg-white/5"
+            className="w-full min-h-11 border-slate-700 text-slate-200 hover:bg-white/5"
           >
             <div className="flex items-center gap-2">
               <FcGoogle size={18} />

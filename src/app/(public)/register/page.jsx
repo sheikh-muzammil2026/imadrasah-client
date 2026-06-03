@@ -11,8 +11,25 @@ import { useRouter } from "next/navigation";
 export default function RegisterPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [password, setPassword]   = useState("");
+  const [passError, setPassError] = useState("");
   
   const router = useRouter()
+
+  const validatePassword = (password)=>{
+        if(password.length < 8){
+          return "Password must be at least 8 characters";
+        }
+        if (!/[A-Z]/.test(password)) {
+        return "Password must contain at least one uppercase letter";
+      }
+      if (!/[0-9]/.test(password)) {
+        return "Password must contain at least one number";
+      }
+
+      return "";
+      }
+
 
   const toggleVisibility = () => {
     setIsVisible((prev) => !prev);
@@ -24,16 +41,16 @@ export default function RegisterPage() {
     setIsLoading(true);
     const formData = new FormData(e.target);
     const user = Object.fromEntries(formData.entries());
-    console.log(user?.role, "from register form")
+    // console.log(user?.role, "from register form")
 
    try {
      
      const {data, error} = await authClient.signUp.email({    
-        email: user.email,
-        password: user.password,
-        name: user.name,
-        image: user.image,
-        role: user?.role?.toLowerCase()?.trim() || "student",
+        email: user?.email,
+        password: user?.password,
+        name: user?.name,
+        image: user?.image,
+        role: user?.role?.toLowerCase()?.trim()
         
     })
      console.log(data)
@@ -73,15 +90,15 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 p-2">
+   <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 px-4 py-6 sm:p-6">
       
       <Card className="flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl md:flex-row">
         
         {/* Left Side */}
-        <div className="relative hidden flex-col justify-between bg-gradient-to-tr from-blue-600 to-indigo-700 p-2 text-white md:flex md:w-1/2">
+        <div className="relative hidden flex-col justify-between bg-gradient-to-tr from-blue-600 to-indigo-700 p-6 lg:p-8 text-white md:flex md:w-1/2">
           
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">
+            <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">
               স্বাগতম আবার!
             </h1>
 
@@ -98,10 +115,10 @@ export default function RegisterPage() {
         </div>
 
         {/* Right Side */}
-        <div className="flex w-full flex-col justify-center bg-slate-950/40 p-4 text-white md:w-1/2">
+        <div className="flex w-full flex-col justify-center bg-slate-950/40 p-5 sm:p-6 md:p-8 text-white md:w-1/2">
           
           <div className="mb-4">
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-xl sm:text-2xl font-bold">
               রেজিস্টার করুন
             </h2>
 
@@ -112,10 +129,10 @@ export default function RegisterPage() {
 
           <form
             onSubmit={handleRegister}
-            className="space-y-2 w-full"
+            className="w-full space-y-3"
           >
             
-             {/* Name */}
+            {/* Name */}
             <div>
               <label className="mb-2 block text-sm text-slate-300">
                 ইউজার নেম
@@ -125,7 +142,7 @@ export default function RegisterPage() {
                 type="text"
                 required
                 name="name"
-                className='w-full'
+                className="w-full"
               />
             </div>
 
@@ -139,85 +156,86 @@ export default function RegisterPage() {
                 type="email"
                 required
                 name="email"
-               className='w-full'
+                className="w-full"
               />
             </div>
 
             {/* Password */}
-            <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                পাসওয়ার্ড
-              </label>
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              পাসওয়ার্ড
+            </label>
 
-              <div className="relative">
-                
-                <Input
-                  type={
-                    isVisible ? "text" : "password"
-                  }
-                  required
-                  name="password"
-                  className="pr-12 w-full"
-                />
+            <div className="relative">
+              <Input
+                type={isVisible ? "text" : "password"}
+                required
+                name="password"
+                className="w-full pr-10"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPassError(validatePassword(e.target.value));
+                }}
+              />
 
-               <button
-                      type="button"
-                      onClick={toggleVisibility}
-                      className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
-                    >
-                      {isVisible ? (
-                        <EyeClosed
-                          width={18}
-                          height={18}
-                        />
-                      ) : (
-                        <Eye
-                          width={18}
-                          height={18}
-                        />
-                      )}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={toggleVisibility}
+                className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-slate-400"
+              >
+                {isVisible ? (
+                  <EyeClosed width={18} height={18} />
+                ) : (
+                  <Eye width={18} height={18} />
+                )}
+              </button>
             </div>
 
-            {/* Image url */}
+            <div className="min-h-[20px] mt-1">
+              {passError && (
+                <p className="text-sm text-red-500">
+                  {passError}
+                </p>
+              )}
+            </div>
+          </div>            
+
+            {/* Image URL */}
             <div>
               <label className="mb-2 block text-sm text-slate-300">
                 ফটো লিঙ্ক
               </label>
 
-              <div>
-                
-                <Input
-                  type="url"
-                  name="image"
-                  required
-                   placeholder="https://example.com/photo.jpg"
-                   className='w-full'
-                />
-
-              </div>
+              <Input
+                type="url"
+                name="image"
+                required
+                placeholder="https://example.com/photo.jpg"
+                className="w-full"
+              />
             </div>
-            
-            {/* role */}
-            <div>
-                <label className="mb-2 block text-sm text-slate-300">
-                  রোল
-                </label>
 
-                <select
-                  name="role"
-                  required
-                  className="w-full border rounded px-3 py-2"
-                >
-                  <option value="">Select Role</option>
-                  <option value="student">Student</option>
-                  <option value="teacher">Teacher</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
+            {/* Role */}
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                রোল
+              </label>
+
+              <select
+                name="role"
+                required
+                className="w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-white outline-none"
+              >
+                <option value="">Select Role</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
             {/* Remember + Forgot */}
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:justify-between">
               
               <Checkbox size="sm">
                 <span className="text-slate-400">
@@ -233,20 +251,17 @@ export default function RegisterPage() {
               </Link>
             </div>
 
-            {/* রেজিস্ট্রেশন করুন */}
+            {/* Submit Button */}
             <Button
               type="submit"
               isLoading={isLoading}
-              className="w-full bg-indigo-600 font-semibold text-white hover:bg-indigo-700"
+              className="w-full min-h-11 bg-indigo-600 font-semibold text-white hover:bg-indigo-700"
             >
               <div className="flex items-center gap-2">
                 রেজিস্ট্রেশন করুন
 
                 {!isLoading && (
-                  <ArrowRight
-                    width={16}
-                    height={16}
-                  />
+                  <ArrowRight width={16} height={16} />
                 )}
               </div>
             </Button>
@@ -254,7 +269,6 @@ export default function RegisterPage() {
 
           {/* Divider */}
           <div className="relative my-6 flex items-center justify-center">
-            
             <div className="absolute w-full border-t border-slate-800"></div>
 
             <span className="relative px-2 text-xs uppercase text-slate-500">
@@ -266,24 +280,22 @@ export default function RegisterPage() {
           <Button
             variant="bordered"
             onClick={handleGoogleLogin}
-            className="w-full border-slate-700 text-slate-200 hover:bg-white/5"
+            className="w-full min-h-11 border-slate-700 text-slate-200 hover:bg-white/5"
           >
             <div className="flex items-center gap-2">
               <FcGoogle size={18} />
-
               Google দিয়ে লগইন করুন
             </div>
           </Button>
 
-          {/* Register */}
-          <p className="mt-2 text-center text-sm text-slate-400">
-            অ্যাকাউন্ট নেই?{" "}
-            
+          {/* Login Link */}
+          <p className="mt-3 text-center text-sm text-slate-400">
+            ইতোমধ্যে অ্যাকাউন্ট আছে?{" "}
             <Link
-              href="/register"
+              href="/login"
               className="font-medium text-indigo-400 hover:underline"
             >
-              রেজিস্ট্রেশন করুন
+              লগইন করুন
             </Link>
           </p>
         </div>

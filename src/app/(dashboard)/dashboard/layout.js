@@ -1,6 +1,8 @@
-// app/(dashboard)/dashboard/layout.jsx
 
-import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
+import dynamic from "next/dynamic";
+
+// import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
+const DashboardNavbar = dynamic(()=> import("@/components/dashboard/DashboardNavbar"))
 
 export const metadata = {
  title: {

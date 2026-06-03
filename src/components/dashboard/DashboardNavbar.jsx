@@ -36,17 +36,44 @@ export default function DashboardNavbar() {
      }
     }
 
-  const menuItems = [
-   
-    {label: "Home", path: "/"},
-    {label: "Admin", path: "/dashboard/admin"},
-    {label: "Teacher", path: "/dashboard/teacher"},
-    {label: "Admissions", path: "/dashboard/admissions"},
+    const role = session?.user?.role;
+
+const menuConfig = {
+  admin: [
+    { label: "Admin", path: "/dashboard/admin" },
+    { label: "Admissions", path: "/dashboard/admissions" },
     { label: "Add Course", path: "/dashboard/add-course" },
     { label: "My Courses", path: "/dashboard/my-courses" },
-    { label: "My Classes", path: "/dashboard/my-enrollments" }
+  ],
+
+  teacher: [
+    { label: "Teacher", path: "/dashboard/teacher" },
+    { label: "Add Course", path: "/dashboard/add-course" },
+    { label: "My Courses", path: "/dashboard/my-courses" },
+  ],
+
+  student: [
     
-  ];
+    { label: "My Classes", path: "/dashboard/my-enrollments" },
+  ],
+};
+
+const menuItems = [
+  { label: "Home", path: "/" },
+  ...(menuConfig[role] || menuConfig.student),
+];
+
+  // const menuItems = [
+   
+  //   {label: "Home", path: "/"},
+  //   {label: "Admin", path: "/dashboard/admin"},
+  //   {label: "Teacher", path: "/dashboard/teacher"},
+  //   {label: "Admissions", path: "/dashboard/admissions"},
+  //   { label: "Add Course", path: "/dashboard/add-course" },
+  //   { label: "My Courses", path: "/dashboard/my-courses" },
+  //   { label: "My Classes", path: "/dashboard/my-enrollments" }
+    
+  // ];
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md transition-colors duration-300">

@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button, Dropdown, Avatar, Label } from "@heroui/react";
-import { ArrowRightFromSquare } from "@gravity-ui/icons";
+import { Button, Dropdown, Avatar, Label, useTheme } from "@heroui/react";
+import { ArrowRightFromSquare, Moon, Sun } from "@gravity-ui/icons";
 import { authClient } from "@/lib/auth-client";
 import { MdMenu } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
@@ -15,6 +15,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter()
+  const [theme, setTheme]   = useTheme();
 
   //  get user from session
   const { data: session } = authClient.useSession()
@@ -75,6 +76,9 @@ export default function Navbar() {
               );
             })}
           </div>
+          <Button variant="ghost" onClick={()=> setTheme(!theme)}>
+            {theme === "dark" ? <Moon/> : <Sun/>}  
+          </Button>
 
         {/* ৩. ইউজার প্রোফাইল / অথেনটিকেশন বাটন  */}
         <div className="hidden md:flex items-center space-x-4">
